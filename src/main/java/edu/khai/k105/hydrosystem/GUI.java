@@ -1,5 +1,8 @@
 package edu.khai.k105.hydrosystem;
 
+import edu.khai.k105.hydrosystem.hydraulic.graph.GraphEditor;
+import edu.khai.k105.hydrosystem.hydraulic.graph.Graph;
+
 import javax.swing.*;
 
 public class GUI implements Runnable {
@@ -10,8 +13,10 @@ public class GUI implements Runnable {
 
         // Создаем окно с заголовком "Hello, World!"
 
-        JFrame f = new JFrame ("Hello, World!");
-
+        JFrame f = new JFrame ("Редактируем график");
+        Graph graph = new Graph();
+        GraphEditor graphEditor = new GraphEditor(graph);
+        f.setContentPane(graphEditor.getContentPane());
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
             SwingUtilities.updateComponentTreeUI(f);
@@ -35,13 +40,13 @@ public class GUI implements Runnable {
         // Добавляем на панель окна нередактируемый компонент с текстом.
 
         //f.getContentPane().add (new JLabel("Hello, World!")); - старый стиль
-        f.add(new JLabel("Hello World"));
+        //f.add(new JLabel("Hello World"));
 
         // pack() "упаковывает" окно до оптимального размера, рассчитанного на основании размеров
         // всех расположенных в нем компонентов.
 
         f.pack();
-
+        f.setLocationRelativeTo(null);
         // Показать окно
 
         f.setVisible(true);
