@@ -1,15 +1,14 @@
 package edu.khai.k105.hydrosystem.project;
 
+import edu.khai.k105.hydrosystem.Application;
 import edu.khai.k105.hydrosystem.hydraulic.HydraulicEditor;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.File;
 
-public class ProjectWindow extends JFrame {
+public class ProjectWindow extends JFrame implements Runnable {
 
     private JMenuBar menuBar;
     private JMenu fileMenu;
@@ -18,9 +17,16 @@ public class ProjectWindow extends JFrame {
     private JMenuItem saveProjectMenuItem;
     private JMenuItem exitMenuItem;
     private HydraulicEditor hydraulicEditor;
+    private Application application;
 
-    public ProjectWindow() {
-        super("Проект2");
+    public ProjectWindow(Application application) {
+        super();
+        this.application = application;
+    }
+
+    @Override
+    public void run() {
+        setTitle("Проект 3");
         setJMenuBar(getMenu());
         hydraulicEditor = new HydraulicEditor();
         setContentPane(hydraulicEditor.getContentPane());
@@ -62,6 +68,12 @@ public class ProjectWindow extends JFrame {
     private JMenuItem getCreateProjectMenuItem() {
         if (createProjectMenuItem == null) {
             createProjectMenuItem = new JMenuItem("Создать проект");
+            createProjectMenuItem.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    createProject();
+                }
+            });
         }
         return createProjectMenuItem;
     }
@@ -103,8 +115,7 @@ public class ProjectWindow extends JFrame {
         JFileChooser fileChooser = new JFileChooser();
         int ret = fileChooser.showOpenDialog(this);
         if (ret == JFileChooser.APPROVE_OPTION) {
-            File file = fileChooser.getSelectedFile();
-            System.out.println("Selected file = " + file);
+            application.openProject(fileChooser.getSelectedFile());
         }
     }
 
@@ -112,8 +123,15 @@ public class ProjectWindow extends JFrame {
         JFileChooser fileChooser = new JFileChooser();
         int ret = fileChooser.showSaveDialog(this);
         if (ret == JFileChooser.APPROVE_OPTION) {
-            File file = fileChooser.getSelectedFile();
-            System.out.println("Selected file = " + file);
+            application.saveProject(fileChooser.getSelectedFile());
+        }
+    }
+
+    private void createProject() {
+        JFileChooser fileChooser = new JFileChooser();
+        int ret = fileChooser.showSaveDialog(this);
+        if (ret == JFileChooser.APPROVE_OPTION) {
+            application.createNewProject(fileChooser.getSelectedFile());
         }
     }
 

@@ -1,23 +1,8 @@
-package edu.khai.k105.hydrosystem;
-
-import edu.khai.k105.hydrosystem.graph.GraphModel;
-import edu.khai.k105.hydrosystem.graph.GraphEditor;
-import edu.khai.k105.hydrosystem.graph.GraphPoint;
-import edu.khai.k105.hydrosystem.graph.GraphSeries;
-import edu.khai.k105.hydrosystem.project.ProjectWindow;
+package edu.khai.k105.hydrosystem.graph;
 
 import javax.swing.*;
 
-public class GUI implements Runnable {
-
-    private ProjectWindow projectWindow;
-
-    @Override
-    public void run() {
-        projectWindow = new ProjectWindow();
-        createGraphEditor();
-    }
-
+public class CreateGraphEditor {
     private void createGraphEditor() {
         JFrame f = new JFrame ("Редактируем график");
         GraphModel graph = new GraphModel();
@@ -61,5 +46,4 @@ public class GUI implements Runnable {
 
         f.setVisible(true);
     }
-
 }

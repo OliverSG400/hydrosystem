@@ -1,14 +1,22 @@
 package edu.khai.k105.hydrosystem.graph;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType
 public class GraphSeries implements Serializable {
 
+    @XmlElementWrapper(name = "metaElements")
     private Map<String, Object> meta = new HashMap<String, Object>();
+    @XmlElementWrapper(name = "pointsElements")
     private List<GraphPoint> points = new ArrayList<GraphPoint>();
 
     public List<GraphPoint> getPoints() {

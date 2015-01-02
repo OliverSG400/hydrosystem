@@ -1,7 +1,12 @@
 package edu.khai.k105.hydrosystem.graph;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType
 public class GraphPoint implements Serializable {
 
     public float x;
