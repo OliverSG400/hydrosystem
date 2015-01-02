@@ -1,30 +1,17 @@
-package edu.khai.k105.hydrosystem.hydraulic.graph;
+package edu.khai.k105.hydrosystem.graph;
 
 import java.io.Serializable;
 
-public class Point implements Serializable {
+public class GraphPoint implements Serializable {
 
-    private float x;
-    private float y;
+    public float x;
+    public float y;
 
-    public Point(float x, float y) {
+    public GraphPoint() {
+    }
+
+    public GraphPoint(float x, float y) {
         this.x = x;
-        this.y = y;
-    }
-
-    public float getX() {
-        return x;
-    }
-
-    public void setX(float x) {
-        this.x = x;
-    }
-
-    public float getY() {
-        return y;
-    }
-
-    public void setY(float y) {
         this.y = y;
     }
 
@@ -33,10 +20,10 @@ public class Point implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Point point = (Point) o;
+        GraphPoint graphPoint = (GraphPoint) o;
 
-        if (Float.compare(point.x, x) != 0) return false;
-        if (Float.compare(point.y, y) != 0) return false;
+        if (Float.compare(graphPoint.x, x) != 0) return false;
+        if (Float.compare(graphPoint.y, y) != 0) return false;
 
         return true;
     }
@@ -52,4 +39,5 @@ public class Point implements Serializable {
     public String toString() {
         return "[" + x + " | " + y + "]";
     }
+
 }

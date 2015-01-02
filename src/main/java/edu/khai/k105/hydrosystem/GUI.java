@@ -1,24 +1,37 @@
 package edu.khai.k105.hydrosystem;
 
-import edu.khai.k105.hydrosystem.hydraulic.graph.GraphEditor;
-import edu.khai.k105.hydrosystem.hydraulic.graph.Graph;
+import edu.khai.k105.hydrosystem.graph.GraphModel;
+import edu.khai.k105.hydrosystem.graph.GraphEditor;
+import edu.khai.k105.hydrosystem.graph.GraphPoint;
+import edu.khai.k105.hydrosystem.graph.GraphSeries;
+import edu.khai.k105.hydrosystem.project.ProjectWindow;
 
 import javax.swing.*;
 
 public class GUI implements Runnable {
 
+    private ProjectWindow projectWindow;
+
     @Override
     public void run() {
+        projectWindow = new ProjectWindow();
+        createGraphEditor();
+    }
 
-
-        // Создаем окно с заголовком "Hello, World!"
-
+    private void createGraphEditor() {
         JFrame f = new JFrame ("Редактируем график");
-        Graph graph = new Graph();
+        GraphModel graph = new GraphModel();
+        GraphSeries series = new GraphSeries();
+        series.addPoint(new GraphPoint(50, 50));
+        series.addPoint(new GraphPoint(100, 100));
+        series.addPoint(new GraphPoint(150, 50));
+        series.addPoint(new GraphPoint(200, 100));
+        graph.addSeries(series);
         GraphEditor graphEditor = new GraphEditor(graph);
         f.setContentPane(graphEditor.getContentPane());
         try {
-            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+//          UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             SwingUtilities.updateComponentTreeUI(f);
         }
         catch (Exception e){
@@ -41,9 +54,6 @@ public class GUI implements Runnable {
 
         //f.getContentPane().add (new JLabel("Hello, World!")); - старый стиль
         //f.add(new JLabel("Hello World"));
-
-        // pack() "упаковывает" окно до оптимального размера, рассчитанного на основании размеров
-        // всех расположенных в нем компонентов.
 
         f.pack();
         f.setLocationRelativeTo(null);
