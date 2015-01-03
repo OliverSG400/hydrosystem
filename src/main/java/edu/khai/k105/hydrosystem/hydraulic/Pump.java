@@ -12,4 +12,8 @@ public class Pump {
 
     private GraphSeries pumpCharacteristic;
 
+    @Override
+    public String toString() {
+        return "Насос";
+    }
 }

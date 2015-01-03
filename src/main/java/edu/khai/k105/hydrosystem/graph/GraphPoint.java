@@ -2,6 +2,7 @@ package edu.khai.k105.hydrosystem.graph;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 
@@ -9,7 +10,10 @@ import java.io.Serializable;
 @XmlType
 public class GraphPoint implements Serializable {
 
+    @XmlAttribute
     public float x;
+
+    @XmlAttribute
     public float y;
 
     public GraphPoint() {

@@ -28,8 +28,6 @@ public class ProjectWindow extends JFrame implements Runnable {
     public void run() {
         setTitle("Проект 3");
         setJMenuBar(getMenu());
-        hydraulicEditor = new HydraulicEditor();
-        setContentPane(hydraulicEditor.getContentPane());
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 //            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
@@ -111,11 +109,19 @@ public class ProjectWindow extends JFrame implements Runnable {
         return exitMenuItem;
     }
 
+    private void openProjectEditor() {
+        hydraulicEditor = new HydraulicEditor(application);
+        setContentPane(hydraulicEditor.getContentPane());
+        validate();
+    }
+
     private void openProject() {
         JFileChooser fileChooser = new JFileChooser();
         int ret = fileChooser.showOpenDialog(this);
         if (ret == JFileChooser.APPROVE_OPTION) {
             application.openProject(fileChooser.getSelectedFile());
+            setTitle(application.getCurrentProject().getTitle());
+            openProjectEditor();
         }
     }
 
@@ -132,6 +138,8 @@ public class ProjectWindow extends JFrame implements Runnable {
         int ret = fileChooser.showSaveDialog(this);
         if (ret == JFileChooser.APPROVE_OPTION) {
             application.createNewProject(fileChooser.getSelectedFile());
+            setTitle(application.getCurrentProject().getTitle());
+            openProjectEditor();
         }
     }
 

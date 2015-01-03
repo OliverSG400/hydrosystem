@@ -16,7 +16,7 @@ public class Application {
 
     public void createNewProject(File path) {
         currentProject = new Project();
-        currentProject.setTitle("some title");
+        currentProject.setTitle("Безымянный проект");
         saveProject(path);
     }
 
@@ -34,6 +34,10 @@ public class Application {
         } catch (JAXBException e) {
             e.printStackTrace();
         }
+    }
+
+    public Project getCurrentProject() {
+        return currentProject;
     }
 
 }

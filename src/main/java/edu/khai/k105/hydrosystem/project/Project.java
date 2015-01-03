@@ -13,8 +13,11 @@ public class Project {
 
     private String title;
     private String description;
-    private Pump pump;
     private Circuit circuit;
+
+    public Project() {
+        circuit = new Circuit();
+    }
 
     public String getTitle() {
         return title;
@@ -32,19 +35,16 @@ public class Project {
         this.description = description;
     }
 
-    public Pump getPump() {
-        return pump;
-    }
-
-    public void setPump(Pump pump) {
-        this.pump = pump;
-    }
-
     public Circuit getCircuit() {
         return circuit;
     }
 
     public void setCircuit(Circuit circuit) {
         this.circuit = circuit;
+    }
+
+    @Override
+    public String toString() {
+        return title;
     }
 }
