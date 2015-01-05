@@ -11,15 +11,15 @@ import java.io.Serializable;
 public class GraphPoint implements Serializable {
 
     @XmlAttribute
-    public float x;
+    public double x;
 
     @XmlAttribute
-    public float y;
+    public double y;
 
     public GraphPoint() {
     }
 
-    public GraphPoint(float x, float y) {
+    public GraphPoint(double x, double y) {
         this.x = x;
         this.y = y;
     }
@@ -27,20 +27,24 @@ public class GraphPoint implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof GraphPoint)) return false;
 
-        GraphPoint graphPoint = (GraphPoint) o;
+        GraphPoint that = (GraphPoint) o;
 
-        if (Float.compare(graphPoint.x, x) != 0) return false;
-        if (Float.compare(graphPoint.y, y) != 0) return false;
+        if (Double.compare(that.x, x) != 0) return false;
+        if (Double.compare(that.y, y) != 0) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = (x != +0.0f ? Float.floatToIntBits(x) : 0);
-        result = 31 * result + (y != +0.0f ? Float.floatToIntBits(y) : 0);
+        int result;
+        long temp;
+        temp = Double.doubleToLongBits(x);
+        result = (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(y);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
 

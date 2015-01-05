@@ -36,7 +36,7 @@ public class GraphEditor {
                 public void mouseWheelMoved(MouseWheelEvent e) {
                     final float delta = 0.5f;
                     int notches = e.getWheelRotation();
-                    float scale = graphPanel.getScaleModifier();
+                    double scale = graphPanel.getScaleModifier();
                     if (notches < 0) {
                         scale += delta;
                     } else {

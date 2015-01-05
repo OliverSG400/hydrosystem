@@ -16,7 +16,7 @@ public class JGraph extends JPanel {
     private static final int GRID_MARGIN_TOP = 20;
     private static final Color HIGHLIGHTED_SERIES = Color.BLUE;
     private static final Color HIGHLIGHTED_POINT = Color.ORANGE;
-    private float scaleModifier = 1;
+    private double scaleModifier = 1;
     private GraphModel model;
     private boolean adaptScale;
     private int selectedSeries = 0;
@@ -45,8 +45,8 @@ public class JGraph extends JPanel {
     public Point translate(GraphPoint point) {
         if (point != null) {
             Point canvasPoint = new Point();
-            canvasPoint.x = Math.round(point.x * scaleModifier) + GRID_MARGIN_LEFT;
-            canvasPoint.y = getHeight() - GRID_MARGIN_BOTTOM - Math.round(point.y * scaleModifier);
+            canvasPoint.x = (int) (Math.round(point.x * scaleModifier) + GRID_MARGIN_LEFT);
+            canvasPoint.y = (int) (getHeight() - GRID_MARGIN_BOTTOM - Math.round(point.y * scaleModifier));
             return canvasPoint;
         }
         return null;
@@ -62,11 +62,11 @@ public class JGraph extends JPanel {
         return null;
     }
 
-    public float getScaleModifier() {
+    public double getScaleModifier() {
         return scaleModifier;
     }
 
-    public void setScaleModifier(float scaleModifier) {
+    public void setScaleModifier(double scaleModifier) {
         this.scaleModifier = scaleModifier;
     }
 
@@ -94,8 +94,8 @@ public class JGraph extends JPanel {
 
     private void calculateScale() {
         if (model.getSeries().get(0).getPoints().size() >= 2) {
-            float maxX = 0;
-            float maxY = 0;
+            double maxX = 0;
+            double maxY = 0;
             for (GraphSeries series : model.getSeries()) {
                 for (GraphPoint point : series.getPoints()) {
                     if (point.x > maxX) {
@@ -109,7 +109,7 @@ public class JGraph extends JPanel {
             int workingWidth = (getWidth() - GRID_MARGIN_LEFT - GRID_MARGIN_RIGHT);
             int workingHeight = (getHeight() - GRID_MARGIN_TOP - GRID_MARGIN_BOTTOM);
             int canvasMax = Math.max(workingWidth, workingHeight);
-            float graphMax = Math.max(maxX, maxY);
+            double graphMax = Math.max(maxX, maxY);
             setScaleModifier(canvasMax / graphMax);
         }
         adaptScale = false;
@@ -180,18 +180,18 @@ public class JGraph extends JPanel {
 
     private void drawFence(Graphics g, Point origin, Point xEnd, Point yEnd, int stepPx) {
         if (stepPx * scaleModifier > 5) {
-            float step = stepPx * scaleModifier;
+            double step = stepPx * scaleModifier;
             Stroke previousStroke = ((Graphics2D)g).getStroke();
             Stroke dashed = new BasicStroke(0.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{2}, 0);
             ((Graphics2D)g).setStroke(dashed);
-            float tempX = origin.x + step;
+            double tempX = origin.x + step;
             while (tempX < xEnd.x) {
-                g.drawLine(Math.round(tempX), origin.y, Math.round(tempX), yEnd.y);
+                g.drawLine((int)Math.round(tempX), origin.y, (int)Math.round(tempX), yEnd.y);
                 tempX += step;
             }
-            float tempY = origin.y - step;
+            double tempY = origin.y - step;
             while (tempY > yEnd.y) {
-                g.drawLine(origin.x, Math.round(tempY), xEnd.x, Math.round(tempY));
+                g.drawLine(origin.x, (int)Math.round(tempY), xEnd.x, (int)Math.round(tempY));
                 tempY -= step;
             }
             ((Graphics2D)g).setStroke(previousStroke);

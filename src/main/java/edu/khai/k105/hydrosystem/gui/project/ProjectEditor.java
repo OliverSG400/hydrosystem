@@ -10,6 +10,7 @@ public class ProjectEditor {
     private JPanel contentPane;
     private JTextField titleTextField;
     private JTextArea descriptionTextArea;
+    private JButton button1;
     private Project project;
 
     public ProjectEditor(final Project project) {
@@ -28,6 +29,12 @@ public class ProjectEditor {
             public void focusLost(FocusEvent e) {
                 super.focusLost(e);
                 project.setDescription(descriptionTextArea.getText());
+            }
+        });
+        button1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                project.getCircuit().characteristic();
             }
         });
     }
