@@ -4,9 +4,11 @@ import edu.khai.k105.hydrosystem.application.Application;
 import edu.khai.k105.hydrosystem.application.project.circuit.Circuit;
 import edu.khai.k105.hydrosystem.application.project.circuit.Fluid;
 import edu.khai.k105.hydrosystem.application.project.circuit.Pump;
+import edu.khai.k105.hydrosystem.application.project.circuit.element.AccumulatorElement;
 import edu.khai.k105.hydrosystem.application.project.circuit.element.MechanismElement;
 import edu.khai.k105.hydrosystem.application.project.circuit.element.PipelineElement;
 import edu.khai.k105.hydrosystem.application.project.circuit.element.ResistanceElement;
+import edu.khai.k105.hydrosystem.gui.project.circuit.element.AccumulatorEditor;
 import edu.khai.k105.hydrosystem.gui.project.circuit.element.MechanismEditor;
 import edu.khai.k105.hydrosystem.gui.project.circuit.element.PipelineEditor;
 import edu.khai.k105.hydrosystem.gui.project.circuit.element.ResistanceEditor;
@@ -77,6 +79,10 @@ public class HydraulicEditor {
         if (selection instanceof MechanismElement) {
             MechanismEditor mechanismEditor = new MechanismEditor((MechanismElement) selection, application.getCurrentProject(), this);
             propertiesPanel.add(mechanismEditor.getContentPane(), BorderLayout.CENTER);
+        }
+        if (selection instanceof AccumulatorElement) {
+            AccumulatorEditor accumulatorEditor = new AccumulatorEditor((AccumulatorElement) selection, application.getCurrentProject(), this);
+            propertiesPanel.add(accumulatorEditor.getContentPane(), BorderLayout.CENTER);
         }
         propertiesPanel.validate();
     }

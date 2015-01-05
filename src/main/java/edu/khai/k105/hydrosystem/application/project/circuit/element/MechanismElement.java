@@ -54,7 +54,7 @@ public class MechanismElement extends Element {
         }
 
         for (int k = 0; k < pumpCharacteristic.size(); k++) {
-            double deltaP = mechanism.getVariableLoadCharacteristic().getPoints().get(2).y / pistonSquare;
+            double deltaP = mechanism.getVariableLoadCharacteristic().getPoints().get(1).y / pistonSquare;
             systemCharacteristic.get(k).x = pumpCharacteristic.get(k).x;
             systemCharacteristic.get(k).y += (float) deltaP;
         }
