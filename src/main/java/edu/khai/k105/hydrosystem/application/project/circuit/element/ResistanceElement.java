@@ -1,6 +1,7 @@
 package edu.khai.k105.hydrosystem.application.project.circuit.element;
 
 import edu.khai.k105.hydrosystem.application.project.circuit.Circuit;
+import edu.khai.k105.hydrosystem.application.project.circuit.Fluid;
 import edu.khai.k105.hydrosystem.application.project.graph.GraphPoint;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -42,16 +43,13 @@ public class ResistanceElement extends Element {
     }
 
     @Override
-    public void take(List<GraphPoint> pumpCharacteristic, List<GraphPoint> systemCharacteristic, Circuit circuit) {
-        for (int k = 0; k < pumpCharacteristic.size(); k++) {
-            double v = (4 * pumpCharacteristic.get(k).x)
-                        / (Math.PI * inputDiameter); // здесь был V:=(4*Q[k])/(pi*D);
-            double deltaP = (coefficient
-                    * circuit.getWorkingFluid().getSpecificWeight()
-                    * Math.pow(v, 2)
-             ) / (2 * circuit.getGravityAcceleration());
-            systemCharacteristic.get(k).x = pumpCharacteristic.get(k).x;
-            systemCharacteristic.get(k).y += (float) deltaP;
-        }
+    public double deltaP(double pumpQ, Fluid fluid, double gravityAcceleration) {
+        double v = (4 * pumpQ)
+                    / (Math.PI * inputDiameter); // здесь был V:=(4*Q[k])/(pi*D);
+        double deltaP = (coefficient
+                * fluid.getSpecificWeight()
+               * Math.pow(v, 2)
+        ) / (2 * gravityAcceleration);
+        return deltaP;
     }
 }

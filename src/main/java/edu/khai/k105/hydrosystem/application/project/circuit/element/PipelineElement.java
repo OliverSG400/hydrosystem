@@ -1,6 +1,7 @@
 package edu.khai.k105.hydrosystem.application.project.circuit.element;
 
 import edu.khai.k105.hydrosystem.application.project.circuit.Circuit;
+import edu.khai.k105.hydrosystem.application.project.circuit.Fluid;
 import edu.khai.k105.hydrosystem.application.project.graph.GraphPoint;
 import edu.khai.k105.hydrosystem.application.project.graph.GraphSeries;
 
@@ -38,26 +39,23 @@ public class PipelineElement extends Element {
     }
 
     @Override
-    public void take(List<GraphPoint> pumpCharacteristic, List<GraphPoint> systemCharacteristic, Circuit circuit) {
-        for (int k = 0; k < pumpCharacteristic.size(); k++) {
-            double deltaP = 0;
-            if (pumpCharacteristic.get(k).x != 0) {
-                double reynolds = (4 * pumpCharacteristic.get(k).x)
-                        / (Math.PI * diameter * circuit.getWorkingFluid().getKinematicalViscosity());
-                double lambda = calculateLambda(reynolds);
-                deltaP = (lambda
-                        * circuit.getWorkingFluid().getSpecificWeight()
-                        * length
-                        * 16
-                        * Math.pow(pumpCharacteristic.get(k).x, 2)
-                        )  / (2
-                        * circuit.getGravityAcceleration()
-                        * Math.pow(diameter, 5)
-                        * Math.pow(Math.PI, 2));
-            }
-            systemCharacteristic.get(k).x = pumpCharacteristic.get(k).x;
-            systemCharacteristic.get(k).y += (float) deltaP;
+    public double deltaP(double pumpQ, Fluid fluid, double gravityAcceleration) {
+        double deltaP = 0;
+        if (pumpQ != 0) {
+            double reynolds = (4 * pumpQ)
+                    / (Math.PI * diameter * fluid.getKinematicalViscosity());
+            double lambda = calculateLambda(reynolds);
+            deltaP = (lambda
+                    * fluid.getSpecificWeight()
+                    * length
+                    * 16
+                    * Math.pow(pumpQ, 2)
+                    )  / (2
+                    * gravityAcceleration
+                    * Math.pow(diameter, 5)
+                    * Math.pow(Math.PI, 2));
         }
+        return deltaP;
     }
 
     private double calculateLambda(double reynolds) {

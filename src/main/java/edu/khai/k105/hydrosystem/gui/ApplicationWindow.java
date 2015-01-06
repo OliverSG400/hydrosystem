@@ -6,6 +6,7 @@ import edu.khai.k105.hydrosystem.gui.project.circuit.HydraulicEditor;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class ApplicationWindow extends JFrame implements Runnable {
 
@@ -14,6 +15,7 @@ public class ApplicationWindow extends JFrame implements Runnable {
     private JMenuItem createProjectMenuItem;
     private JMenuItem openProjectMenuItem;
     private JMenuItem saveProjectMenuItem;
+    private JMenuItem saveAsProjectMenuItem;
     private JMenuItem exitMenuItem;
     private HydraulicEditor hydraulicEditor;
     private Application application;
@@ -56,6 +58,7 @@ public class ApplicationWindow extends JFrame implements Runnable {
             fileMenu.add(getCreateProjectMenuItem());
             fileMenu.add(getOpenProjectMenuItem());
             fileMenu.add(getSaveProjectMenuItem());
+            fileMenu.add(getSaveAsProjectMenuItem());
             fileMenu.addSeparator();
             fileMenu.add(getExitMenuItem());
         }
@@ -94,11 +97,24 @@ public class ApplicationWindow extends JFrame implements Runnable {
             saveProjectMenuItem.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    saveProject();
+                    application.saveProject();
                 }
             });
         }
         return saveProjectMenuItem;
+    }
+
+    private JMenuItem getSaveAsProjectMenuItem() {
+        if (saveAsProjectMenuItem == null) {
+            saveAsProjectMenuItem = new JMenuItem("Сохранить как");
+            saveAsProjectMenuItem.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    saveProject();
+                }
+            });
+        }
+        return saveAsProjectMenuItem;
     }
 
     private JMenuItem getExitMenuItem() {

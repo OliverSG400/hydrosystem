@@ -1,6 +1,7 @@
 package edu.khai.k105.hydrosystem.application.project.circuit.element;
 
 import edu.khai.k105.hydrosystem.application.project.circuit.Circuit;
+import edu.khai.k105.hydrosystem.application.project.circuit.Fluid;
 import edu.khai.k105.hydrosystem.application.project.graph.GraphPoint;
 import edu.khai.k105.hydrosystem.application.project.graph.GraphSeries;
 
@@ -41,22 +42,12 @@ public class MechanismElement extends Element {
     }
 
     @Override
-    public void take(List<GraphPoint> pumpCharacteristic, List<GraphPoint> systemCharacteristic, Circuit circuit) {
+    public double deltaP(double pumpQ, Fluid fluid, double gravityAcceleration) {
 //        DeltaP:=R[i]/F;
 //
 //        Th[k]:=DeltaP;
 //        W[k]:=W[K]+DeltaP;
-        MechanismElement mechanism = null;
-        for (Element element : circuit.getElements()) {
-            if (element instanceof MechanismElement) {
-                mechanism = (MechanismElement) element;
-            }
-        }
-
-        for (int k = 0; k < pumpCharacteristic.size(); k++) {
-            double deltaP = mechanism.getVariableLoadCharacteristic().getPoints().get(1).y / pistonSquare;
-            systemCharacteristic.get(k).x = pumpCharacteristic.get(k).x;
-            systemCharacteristic.get(k).y += (float) deltaP;
-        }
+        double deltaP = this.getVariableLoadCharacteristic().getPoints().get(1).y / pistonSquare;
+        return deltaP;
     }
 }

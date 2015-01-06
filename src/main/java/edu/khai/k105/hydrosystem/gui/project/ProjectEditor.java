@@ -1,6 +1,7 @@
 package edu.khai.k105.hydrosystem.gui.project;
 
 import edu.khai.k105.hydrosystem.application.project.Project;
+import edu.khai.k105.hydrosystem.application.project.graph.GraphPoint;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -34,7 +35,9 @@ public class ProjectEditor {
         button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                project.getCircuit().characteristic();
+                for (GraphPoint point : project.getCircuit().systemCharacteristic()) {
+                    System.out.println("x = " + point.x + "| y = " + point.y);
+                }
             }
         });
     }

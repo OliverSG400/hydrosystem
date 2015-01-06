@@ -11,11 +11,13 @@ import java.io.File;
 public class Application {
 
     private Project currentProject;
+    private File currentProjectFile;
     private FileSystemHandler fileSystemHandler = new FileSystemHandler();
 
     public void createNewProject(File path) {
         currentProject = new Project();
         currentProject.setTitle(extractShortName(path));
+        currentProjectFile = path;
         saveProject(path);
     }
 
@@ -31,9 +33,14 @@ public class Application {
     public void openProject(File path) {
         try {
             currentProject = fileSystemHandler.openProject(path);
+            currentProjectFile = path;
         } catch (JAXBException e) {
             e.printStackTrace();
         }
+    }
+
+    public void saveProject() {
+        saveProject(currentProjectFile);
     }
 
     public void saveProject(File path) {
