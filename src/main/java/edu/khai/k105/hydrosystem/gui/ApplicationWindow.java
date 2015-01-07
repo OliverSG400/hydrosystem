@@ -1,6 +1,9 @@
 package edu.khai.k105.hydrosystem.gui;
 
 import edu.khai.k105.hydrosystem.application.Application;
+import edu.khai.k105.hydrosystem.application.project.graph.GraphModel;
+import edu.khai.k105.hydrosystem.application.project.graph.GraphPoint;
+import edu.khai.k105.hydrosystem.gui.project.calculation.OperatingPointWindow;
 import edu.khai.k105.hydrosystem.gui.project.circuit.HydraulicEditor;
 
 import javax.swing.*;
@@ -17,6 +20,8 @@ public class ApplicationWindow extends JFrame implements Runnable {
     private JMenuItem saveProjectMenuItem;
     private JMenuItem saveAsProjectMenuItem;
     private JMenuItem exitMenuItem;
+    private JMenu calculationMenu;
+    private JMenuItem calculateOperatingPointMenuItem;
     private HydraulicEditor hydraulicEditor;
     private Application application;
 
@@ -48,6 +53,7 @@ public class ApplicationWindow extends JFrame implements Runnable {
         if (menuBar == null) {
             menuBar = new JMenuBar();
             menuBar.add(getProjectJMenu());
+            menuBar.add(getCalculationJMenu());
         }
         return menuBar;
     }
@@ -162,6 +168,32 @@ public class ApplicationWindow extends JFrame implements Runnable {
             setTitle(application.getCurrentProject().getTitle());
             openProjectEditor();
         }
+    }
+
+    private JMenu getCalculationJMenu() {
+        if (calculationMenu == null) {
+            calculationMenu = new JMenu("Расчет");
+            calculationMenu.add(getCalculateOperatingPointMenuItem());
+        }
+        return calculationMenu;
+    }
+
+    private JMenuItem getCalculateOperatingPointMenuItem() {
+        if (calculateOperatingPointMenuItem == null) {
+            calculateOperatingPointMenuItem = new JMenuItem("Рабочая точка");
+            calculateOperatingPointMenuItem.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    GraphModel graphModel = new GraphModel();
+                    graphModel.addSeries(application.getCurrentProject()
+                                .getCircuit().getPump().getPumpCharacteristic());
+                    graphModel.addSeries(application.getCurrentProject().getCircuit().systemCharacteristic());
+                    GraphPoint operatingPoint = application.getCurrentProject().getCircuit().operatingPoint();
+                    new OperatingPointWindow(graphModel, operatingPoint).setVisible(true);
+                }
+            });
+        }
+        return calculateOperatingPointMenuItem;
     }
 
 }

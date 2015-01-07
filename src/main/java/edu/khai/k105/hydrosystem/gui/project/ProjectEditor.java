@@ -32,14 +32,14 @@ public class ProjectEditor {
                 project.setDescription(descriptionTextArea.getText());
             }
         });
-        button1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                for (GraphPoint point : project.getCircuit().systemCharacteristic()) {
-                    System.out.println("x = " + point.x + "| y = " + point.y);
-                }
-            }
-        });
+//        button1.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                for (GraphPoint point : project.getCircuit().systemCharacteristic()) {
+//                    System.out.println("x = " + point.x + "| y = " + point.y);
+//                }
+//            }
+//        });
     }
 
     public JPanel getContentPane() {
