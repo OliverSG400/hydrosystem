@@ -23,6 +23,7 @@ public class ResistanceEditor {
         this.resistanceElement = resistanceElement;
         coefficientTextField.setText(String.valueOf(resistanceElement.getCoefficient()));
         inputDiameterTextField.setText(String.valueOf(resistanceElement.getInputDiameter()));
+        typeComboBox.setSelectedItem(resistanceElement.getType());
         coefficientTextField.addFocusListener(new FocusAdapter() {
             @Override
             public void focusLost(FocusEvent e) {
@@ -45,6 +46,12 @@ public class ResistanceEditor {
                 } catch (NumberFormatException ex) {
                     System.out.println("Number format exception");
                 }
+            }
+        });
+        typeComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                resistanceElement.setType(typeComboBox.getSelectedItem().toString());
             }
         });
         removeElementButton.addActionListener(new ActionListener() {
@@ -91,5 +98,20 @@ public class ResistanceEditor {
 
     public void setInputDiameterTextField(JFormattedTextField inputDiameterTextField) {
         this.inputDiameterTextField = inputDiameterTextField;
+    }
+
+    private void createUIComponents() {
+        typeComboBox = new JComboBox(new String[] {
+                "Вход в бак из трубопровода"
+                , "Выход из бака в трубопровод"
+                , "Колено, закругленное под углом в 90 градусов"
+                , "Кран запорный"
+                , "Обратный клапан"
+                , "Расходомер"
+                , "Соединение дюритовое"
+                , "Соединение самозапорное"
+                , "Тройник"
+                , "Угольник"
+                , "Фильтр сетчатки"});
     }
 }

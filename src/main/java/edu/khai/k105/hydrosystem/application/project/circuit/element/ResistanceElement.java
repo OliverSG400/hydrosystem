@@ -42,6 +42,14 @@ public class ResistanceElement extends Element {
         this.inputDiameter = inputDiameter;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @Override
     public double deltaP(double pumpQ, Fluid fluid, double gravityAcceleration) {
         double v = (4 * pumpQ)
