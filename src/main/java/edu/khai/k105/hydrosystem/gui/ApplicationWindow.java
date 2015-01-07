@@ -4,6 +4,7 @@ import edu.khai.k105.hydrosystem.application.Application;
 import edu.khai.k105.hydrosystem.application.project.graph.GraphModel;
 import edu.khai.k105.hydrosystem.application.project.graph.GraphPoint;
 import edu.khai.k105.hydrosystem.gui.project.calculation.OperatingPointViewer;
+import edu.khai.k105.hydrosystem.gui.project.calculation.PressureLosses;
 import edu.khai.k105.hydrosystem.gui.project.circuit.HydraulicEditor;
 
 import javax.swing.*;
@@ -22,6 +23,7 @@ public class ApplicationWindow extends JFrame implements Runnable {
     private JMenuItem saveAsProjectMenuItem;
     private JMenuItem exitMenuItem;
     private JMenu calculationMenu;
+    private JMenuItem calculatePressureLossesMenuItem;
     private JMenuItem calculateOperatingPointMenuItem;
     private HydraulicEditor hydraulicEditor;
     private Application application;
@@ -203,9 +205,30 @@ public class ApplicationWindow extends JFrame implements Runnable {
     private JMenu getCalculationJMenu() {
         if (calculationMenu == null) {
             calculationMenu = new JMenu("Расчет");
+            calculationMenu.add(getCalculatePressureLossesMenuItem());
             calculationMenu.add(getCalculateOperatingPointMenuItem());
         }
         return calculationMenu;
+    }
+
+    private JMenuItem getCalculatePressureLossesMenuItem() {
+        if (calculatePressureLossesMenuItem == null) {
+            calculatePressureLossesMenuItem = new JMenuItem("Потери давления");
+            calculatePressureLossesMenuItem.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    JFrame frame = new JFrame("Потери давления");
+                    frame.setContentPane(new PressureLosses(application.getCurrentProject().getCircuit())
+                            .getContentPane());
+                    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    frame.pack();
+                    frame.setLocationRelativeTo(null);
+                    frame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
+                    frame.setVisible(true);
+                }
+            });
+        }
+        return calculatePressureLossesMenuItem;
     }
 
     private JMenuItem getCalculateOperatingPointMenuItem() {

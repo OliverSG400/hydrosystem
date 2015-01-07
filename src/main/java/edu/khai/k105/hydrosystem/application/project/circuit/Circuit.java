@@ -41,9 +41,6 @@ public class Circuit {
         };
     }
 
-    /**
-     * Цепь имеет кривую ака Характеристика системы (вычисляемую)
-     */
     public GraphSeries systemCharacteristic() {
         GraphSeries systemCharacteristicSeries = new GraphSeries();
         List<GraphPoint> systemCharacteristic = systemCharacteristicSeries.getPoints();
@@ -56,6 +53,33 @@ public class Circuit {
             systemCharacteristic.add(new GraphPoint(q, p));
         }
         return systemCharacteristicSeries;
+    }
+
+    public Double[][] getSumLossesData() {
+        Double[][] data = new Double[elements.size()]
+                [pump.getPumpCharacteristic().getPoints().size()];
+        for (int e = 0; e < elements.size(); e++) {
+            for (int q = 0; q < pump.getPumpCharacteristic().getPoints().size(); q++) {
+                double deltaP = elements.get(e).deltaP(q, workingFluid, gravityAcceleration);
+                if (e > 0) {
+                    data[e][q] = data[e - 1][q] + deltaP;
+                } else {
+                    data[e][q] = deltaP;
+                }
+            }
+        }
+        return data;
+    }
+
+    public Double[][] getLocalLossesData() {
+        Double[][] data = new Double[elements.size()]
+                [pump.getPumpCharacteristic().getPoints().size()];
+        for (int e = 0; e < elements.size(); e++) {
+            for (int q = 0; q < pump.getPumpCharacteristic().getPoints().size(); q++) {
+                data[e][q] = elements.get(e).deltaP(q, workingFluid, gravityAcceleration);
+            }
+        }
+        return data;
     }
 
     public GraphPoint operatingPoint() {
