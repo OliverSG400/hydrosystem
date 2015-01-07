@@ -20,7 +20,9 @@ public class JGraph extends JPanel {
     private static final int GRID_MARGIN_TOP = 20;
     private static final Color HIGHLIGHTED_SERIES = Color.BLUE;
     private static final Color HIGHLIGHTED_POINT = Color.ORANGE;
-    private double scaleModifier = 1;
+    private double generalScaleModifier = 1;
+    private int xScaleModifier = 1;
+    private int yScaleModifier = 1;
     private Point shiftModifier = new Point(0, 0);
     private GraphModel model;
     private boolean adaptScale;
@@ -67,13 +69,11 @@ public class JGraph extends JPanel {
             public void mouseWheelMoved(MouseWheelEvent e) {
                 final float delta = 0.1f;
                 int notches = e.getWheelRotation();
-                double scale = getScaleModifier();
                 if (notches < 0) {
-                    scale *= 1 + delta;
+                    generalScaleModifier *= 1 + delta;
                 } else {
-                    scale *= 1 - delta;
+                    generalScaleModifier *= 1 - delta;
                 }
-                setScaleModifier(scale);
                 updateUI();
             }
         });
@@ -97,8 +97,8 @@ public class JGraph extends JPanel {
     public Point translate(GraphPoint point) {
         if (point != null) {
             Point canvasPoint = new Point();
-            canvasPoint.x = (int) (Math.round(point.x * scaleModifier) + GRID_MARGIN_LEFT + shiftModifier.x);
-            canvasPoint.y = (int) (getHeight() - GRID_MARGIN_BOTTOM - Math.round(point.y * scaleModifier) - shiftModifier.y);
+            canvasPoint.x = (int) (Math.round(point.x * getXScale()) + GRID_MARGIN_LEFT + shiftModifier.x);
+            canvasPoint.y = (int) (getHeight() - GRID_MARGIN_BOTTOM - Math.round(point.y * getYScale()) - shiftModifier.y);
             return canvasPoint;
         }
         return null;
@@ -107,8 +107,8 @@ public class JGraph extends JPanel {
     public GraphPoint translate(Point point) {
         if (point != null) {
             GraphPoint graphPoint = new GraphPoint();
-            graphPoint.x = ((point.x - GRID_MARGIN_LEFT - shiftModifier.x) / scaleModifier);
-            graphPoint.y = ((getHeight() - GRID_MARGIN_BOTTOM - point.y - shiftModifier.y) / scaleModifier);
+            graphPoint.x = ((point.x - GRID_MARGIN_LEFT - shiftModifier.x) / getXScale());
+            graphPoint.y = ((getHeight() - GRID_MARGIN_BOTTOM - point.y - shiftModifier.y) / getYScale());
             return graphPoint;
         }
         return null;
@@ -122,12 +122,12 @@ public class JGraph extends JPanel {
         this.shiftModifier = shiftModifier;
     }
 
-    public double getScaleModifier() {
-        return scaleModifier;
+    public double getXScale() {
+        return xScaleModifier * generalScaleModifier;
     }
 
-    public void setScaleModifier(double scaleModifier) {
-        this.scaleModifier = scaleModifier;
+    public double getYScale() {
+        return yScaleModifier * generalScaleModifier;
     }
 
     public void adaptScale() {
@@ -178,11 +178,18 @@ public class JGraph extends JPanel {
             double graphHeight = maxY - minY;
             int workingWidth = (getWidth() - GRID_MARGIN_LEFT - GRID_MARGIN_RIGHT - 40);
             int workingHeight = (getHeight() - GRID_MARGIN_TOP - GRID_MARGIN_BOTTOM - 40);
+
+//            while (graphWidth / xScaleModifier > workingWidth) {
+//                xScaleModifier *= 10;
+//            }
+//            while (graphHeight / yScaleModifier > workingHeight) {
+//                yScaleModifier *= 10;
+//            }
             int canvasMax = Math.max(workingWidth, workingHeight);
             double graphMax = Math.max(graphWidth, graphHeight);
-            setScaleModifier(canvasMax / graphMax);
-            setShiftModifier(new Point(-(int) Math.round(minX * scaleModifier),
-                    -(int) Math.round(minY * scaleModifier - getHeight()/2)));
+            generalScaleModifier = canvasMax / graphMax;
+            setShiftModifier(new Point(-(int) Math.round(minX * getXScale()),
+                    -(int) Math.round(minY * getYScale() - getHeight()/2)));
         }
         adaptScale = false;
     }
@@ -200,6 +207,22 @@ public class JGraph extends JPanel {
             }
             paintHighlight(g);
         }
+        paintStatus(g);
+    }
+
+    private void paintStatus(Graphics g) {
+        g.setColor(Color.DARK_GRAY);
+        Point startPoint = new Point(getWidth() - 120, 40);
+        g.drawString("Scale", startPoint.x, startPoint.y);
+        g.drawString(": " + String.format("%.4f", generalScaleModifier), startPoint.x + 40, startPoint.y);
+        g.drawString("x factor", startPoint.x, startPoint.y + 10);
+        g.drawString(": " + xScaleModifier, startPoint.x + 40, startPoint.y + 10);
+        g.drawString("y factor", startPoint.x, startPoint.y + 20);
+        g.drawString(": " + yScaleModifier, startPoint.x + 40, startPoint.y + 20);
+        g.drawString("x shift", startPoint.x, startPoint.y + 30);
+        g.drawString(": " + shiftModifier.x, startPoint.x + 40, startPoint.y + 30);
+        g.drawString("y shift", startPoint.x, startPoint.y + 40);
+        g.drawString(": " + shiftModifier.y, startPoint.x + 40, startPoint.y + 40);
     }
 
     private void setAntialiasint(Graphics g) {
@@ -251,8 +274,8 @@ public class JGraph extends JPanel {
     }
 
     private void drawFence(Graphics g, Point origin, Point xEnd, Point yEnd, int stepPx) {
-        if (stepPx * scaleModifier > 5) {
-            double step = stepPx * scaleModifier;
+        if (stepPx * generalScaleModifier > 5) {
+            double step = stepPx * generalScaleModifier;
             Stroke previousStroke = ((Graphics2D)g).getStroke();
             Stroke dashed = new BasicStroke(0.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{2}, 0);
             ((Graphics2D)g).setStroke(dashed);

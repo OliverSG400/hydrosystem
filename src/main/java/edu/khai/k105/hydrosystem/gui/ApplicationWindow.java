@@ -3,10 +3,11 @@ package edu.khai.k105.hydrosystem.gui;
 import edu.khai.k105.hydrosystem.application.Application;
 import edu.khai.k105.hydrosystem.application.project.graph.GraphModel;
 import edu.khai.k105.hydrosystem.application.project.graph.GraphPoint;
-import edu.khai.k105.hydrosystem.gui.project.calculation.OperatingPointWindow;
+import edu.khai.k105.hydrosystem.gui.project.calculation.OperatingPointViewer;
 import edu.khai.k105.hydrosystem.gui.project.circuit.HydraulicEditor;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -144,6 +145,10 @@ public class ApplicationWindow extends JFrame implements Runnable {
 
     private void openProject() {
         JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new HSPFileFilter());
+        if (application.getCurrentProjectFile() != null) {
+            fileChooser.setCurrentDirectory(application.getCurrentProjectFile().getParentFile());
+        }
         int ret = fileChooser.showOpenDialog(this);
         if (ret == JFileChooser.APPROVE_OPTION) {
             application.openProject(fileChooser.getSelectedFile());
@@ -154,6 +159,10 @@ public class ApplicationWindow extends JFrame implements Runnable {
 
     private void saveProject() {
         JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new HSPFileFilter());
+        if (application.getCurrentProjectFile() != null) {
+            fileChooser.setCurrentDirectory(application.getCurrentProjectFile().getParentFile());
+        }
         int ret = fileChooser.showSaveDialog(this);
         if (ret == JFileChooser.APPROVE_OPTION) {
             application.saveProject(fileChooser.getSelectedFile());
@@ -162,11 +171,32 @@ public class ApplicationWindow extends JFrame implements Runnable {
 
     private void createProject() {
         JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new HSPFileFilter());
+        if (application.getCurrentProjectFile() != null) {
+            fileChooser.setCurrentDirectory(application.getCurrentProjectFile().getParentFile());
+        }
         int ret = fileChooser.showSaveDialog(this);
         if (ret == JFileChooser.APPROVE_OPTION) {
             application.createNewProject(fileChooser.getSelectedFile());
             setTitle(application.getCurrentProject().getTitle());
             openProjectEditor();
+        }
+    }
+
+    private class HSPFileFilter extends FileFilter {
+
+        public String getDescription() {
+            return "Проект гидросистемы";
+        }
+
+        public boolean accept(File f) {
+            if(f != null) {
+                if(f.isDirectory()) {
+                    return true;
+                }
+                return f.toString().endsWith(".hsp");
+            }
+            return false;
         }
     }
 
@@ -184,12 +214,14 @@ public class ApplicationWindow extends JFrame implements Runnable {
             calculateOperatingPointMenuItem.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    GraphModel graphModel = new GraphModel();
-                    graphModel.addSeries(application.getCurrentProject()
-                                .getCircuit().getPump().getPumpCharacteristic());
-                    graphModel.addSeries(application.getCurrentProject().getCircuit().systemCharacteristic());
-                    GraphPoint operatingPoint = application.getCurrentProject().getCircuit().operatingPoint();
-                    new OperatingPointWindow(graphModel, operatingPoint).setVisible(true);
+                    JFrame frame = new JFrame("Рабочая точка");
+                    frame.setContentPane(new OperatingPointViewer(application.getCurrentProject().getCircuit())
+                            .getContentPane());
+                    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    frame.pack();
+                    frame.setLocationRelativeTo(null);
+                    frame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
+                    frame.setVisible(true);
                 }
             });
         }

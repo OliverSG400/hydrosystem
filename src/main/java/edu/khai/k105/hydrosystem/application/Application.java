@@ -44,8 +44,12 @@ public class Application {
     }
 
     public void saveProject(File path) {
+        File fileName = path;
+        if (!fileName.getName().endsWith(".hsp")) {
+            fileName = new File(fileName.getAbsolutePath() + ".hsp");
+        }
         try {
-            fileSystemHandler.saveProject(currentProject, path);
+            fileSystemHandler.saveProject(currentProject, fileName);
         } catch (JAXBException e) {
             e.printStackTrace();
         }
@@ -55,4 +59,7 @@ public class Application {
         return currentProject;
     }
 
+    public File getCurrentProjectFile() {
+        return currentProjectFile;
+    }
 }
