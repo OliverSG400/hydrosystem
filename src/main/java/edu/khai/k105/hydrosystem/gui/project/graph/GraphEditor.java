@@ -7,6 +7,7 @@ import edu.khai.k105.hydrosystem.gui.project.graph.JGraph;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import java.awt.*;
 import java.awt.event.*;
 
 public class GraphEditor {
@@ -31,22 +32,7 @@ public class GraphEditor {
 
     private void bindListeners() {
 
-        graphPanel.addMouseWheelListener(new MouseWheelListener() {
-                @Override
-                public void mouseWheelMoved(MouseWheelEvent e) {
-                    final float delta = 0.5f;
-                    int notches = e.getWheelRotation();
-                    double scale = graphPanel.getScaleModifier();
-                    if (notches < 0) {
-                        scale += delta;
-                    } else {
-                        scale -= delta;
-                    }
-                    graphPanel.setScaleModifier(scale);
-                    graphPanel.updateUI();
-                }
-            }
-        );
+
 
         graphPanel.addMouseListener(new MouseAdapter() {
 

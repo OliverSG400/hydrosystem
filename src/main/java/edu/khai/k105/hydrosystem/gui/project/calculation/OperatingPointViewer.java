@@ -2,6 +2,7 @@ package edu.khai.k105.hydrosystem.gui.project.calculation;
 
 import edu.khai.k105.hydrosystem.application.project.graph.GraphModel;
 import edu.khai.k105.hydrosystem.application.project.graph.GraphPoint;
+import edu.khai.k105.hydrosystem.application.project.graph.GraphSeries;
 import edu.khai.k105.hydrosystem.gui.project.graph.JGraph;
 
 import javax.swing.*;
@@ -12,25 +13,16 @@ public class OperatingPointViewer {
     private JPanel contentPane;
     private JPanel propertiesPane;
     private JGraph graphPanel;
+    private JLabel operatingPointLabel;
+    private JSpinner spinner1;
 
     public OperatingPointViewer(GraphModel graphModel, GraphPoint operatingPoint) {
+        GraphSeries operatingPointSeries = new GraphSeries();
+        operatingPointSeries.addPoint(operatingPoint);
+        graphModel.addSeries(operatingPointSeries);
         graphPanel.setModel(graphModel);
         graphPanel.adaptScale();
-        graphPanel.addMouseWheelListener(new MouseWheelListener() {
-            @Override
-            public void mouseWheelMoved(MouseWheelEvent e) {
-                final float delta = 0.5f;
-                int notches = e.getWheelRotation();
-                double scale = graphPanel.getScaleModifier();
-                if (notches < 0) {
-                    scale += delta;
-                } else {
-                    scale -= delta;
-                }
-                graphPanel.setScaleModifier(scale);
-                graphPanel.updateUI();
-            }
-        });
+        operatingPointLabel.setText(operatingPoint.toString());
     }
 
     public JPanel getContentPane() {
@@ -40,4 +32,5 @@ public class OperatingPointViewer {
     public JGraph getGraphPanel() {
         return graphPanel;
     }
+
 }
