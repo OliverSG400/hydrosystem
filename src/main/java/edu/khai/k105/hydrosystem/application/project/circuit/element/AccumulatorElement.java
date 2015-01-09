@@ -3,6 +3,7 @@ package edu.khai.k105.hydrosystem.application.project.circuit.element;
 import edu.khai.k105.hydrosystem.application.project.circuit.Circuit;
 import edu.khai.k105.hydrosystem.application.project.circuit.Fluid;
 import edu.khai.k105.hydrosystem.application.project.graph.GraphPoint;
+import edu.khai.k105.hydrosystem.application.project.graph.GraphStage;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -26,7 +27,7 @@ public class AccumulatorElement extends Element {
     private double politropa;
 
     @Override
-    public double deltaP(double pumpQ, Fluid fluid, double gravityAcceleration) {
+    public double deltaP(GraphStage mechanismStage, double pumpQ, Fluid fluid, double gravityAcceleration) {
 //        for i:=1 to _j do begin
 //        Sum_W_before_accumulator[i]:= W[i];
 //        end;

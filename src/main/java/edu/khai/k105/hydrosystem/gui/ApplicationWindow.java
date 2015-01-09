@@ -9,6 +9,7 @@ import edu.khai.k105.hydrosystem.gui.project.circuit.HydraulicEditor;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -22,6 +23,7 @@ public class ApplicationWindow extends JFrame implements Runnable {
     private JMenuItem saveProjectMenuItem;
     private JMenuItem saveAsProjectMenuItem;
     private JMenuItem exitMenuItem;
+    private JMenu editMenu;
     private JMenu calculationMenu;
     private JMenuItem calculatePressureLossesMenuItem;
     private JMenuItem calculateOperatingPointMenuItem;
@@ -46,6 +48,7 @@ public class ApplicationWindow extends JFrame implements Runnable {
             System.out.println("Ошибка при загрузке Metal-Look-And-Feel");
         }
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setPreferredSize(new Dimension(800, 600));
         pack();
         setLocationRelativeTo(null);
         setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
@@ -56,6 +59,7 @@ public class ApplicationWindow extends JFrame implements Runnable {
         if (menuBar == null) {
             menuBar = new JMenuBar();
             menuBar.add(getProjectJMenu());
+            menuBar.add(getEditJMenu());
             menuBar.add(getCalculationJMenu());
         }
         return menuBar;
@@ -103,6 +107,9 @@ public class ApplicationWindow extends JFrame implements Runnable {
     private JMenuItem getSaveProjectMenuItem() {
         if (saveProjectMenuItem == null) {
             saveProjectMenuItem = new JMenuItem("Сохранить");
+            saveProjectMenuItem.setAccelerator(KeyStroke.getKeyStroke(
+                    java.awt.event.KeyEvent.VK_S,
+                    java.awt.Event.CTRL_MASK));
             saveProjectMenuItem.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -200,6 +207,13 @@ public class ApplicationWindow extends JFrame implements Runnable {
             }
             return false;
         }
+    }
+
+    private JMenu getEditJMenu() {
+        if (editMenu == null) {
+            editMenu = new JMenu("Редактировать");
+        }
+        return editMenu;
     }
 
     private JMenu getCalculationJMenu() {

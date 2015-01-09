@@ -4,6 +4,7 @@ import edu.khai.k105.hydrosystem.application.project.circuit.element.*;
 import edu.khai.k105.hydrosystem.application.project.graph.GraphPoint;
 import edu.khai.k105.hydrosystem.application.project.graph.GraphSection;
 import edu.khai.k105.hydrosystem.application.project.graph.GraphSeries;
+import edu.khai.k105.hydrosystem.application.project.graph.GraphStage;
 
 import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
@@ -41,26 +42,27 @@ public class Circuit {
         };
     }
 
-    public GraphSeries systemCharacteristic() {
+    public GraphSeries systemCharacteristic(GraphStage mechanismStage) {
         GraphSeries systemCharacteristicSeries = new GraphSeries();
         List<GraphPoint> systemCharacteristic = systemCharacteristicSeries.getPoints();
         for (GraphPoint point : pump.getPumpCharacteristic().getPoints()) {
             double p = 0;
             double q = point.x;
             for (Element element : elements) {
-                p += element.deltaP(q, workingFluid, gravityAcceleration);
+                p += element.deltaP(mechanismStage, q, workingFluid, gravityAcceleration);
             }
             systemCharacteristic.add(new GraphPoint(q, p));
         }
         return systemCharacteristicSeries;
     }
 
-    public Double[][] getSumLossesData() {
+    public Double[][] getSumLossesData(GraphStage mechanismStage) {
         Double[][] data = new Double[elements.size()]
                 [pump.getPumpCharacteristic().getPoints().size()];
         for (int e = 0; e < elements.size(); e++) {
             for (int q = 0; q < pump.getPumpCharacteristic().getPoints().size(); q++) {
-                double deltaP = elements.get(e).deltaP(q, workingFluid, gravityAcceleration);
+                double pumpQ = pump.getPumpCharacteristic().getPoints().get(q).x;
+                double deltaP = elements.get(e).deltaP(mechanismStage, pumpQ, workingFluid, gravityAcceleration);
                 if (e > 0) {
                     data[e][q] = data[e - 1][q] + deltaP;
                 } else {
@@ -71,19 +73,19 @@ public class Circuit {
         return data;
     }
 
-    public Double[][] getLocalLossesData() {
+    public Double[][] getLocalLossesData(GraphStage mechanismStage) {
         Double[][] data = new Double[elements.size()]
                 [pump.getPumpCharacteristic().getPoints().size()];
         for (int e = 0; e < elements.size(); e++) {
             for (int q = 0; q < pump.getPumpCharacteristic().getPoints().size(); q++) {
-                data[e][q] = elements.get(e).deltaP(q, workingFluid, gravityAcceleration);
+                data[e][q] = elements.get(e).deltaP(mechanismStage, q, workingFluid, gravityAcceleration);
             }
         }
         return data;
     }
 
-    public GraphPoint operatingPoint() {
-        GraphSeries systemCharacteristic = systemCharacteristic();
+    public GraphPoint operatingPoint(GraphStage mechanismStage) {
+        GraphSeries systemCharacteristic = systemCharacteristic(mechanismStage);
         for (int i = 0; i < getPump().getPumpCharacteristic().getPoints().size() - 1; i++) {
             GraphSection pumpSection = new GraphSection();
             pumpSection.setA(getPump().getPumpCharacteristic().getPoints().get(i));
@@ -94,6 +96,24 @@ public class Circuit {
             GraphPoint operatingPoint = checkIntersect(pumpSection, systemSection);
             if (operatingPoint != null) {
                 return operatingPoint;
+            }
+        }
+        return null;
+    }
+
+    public MechanismElement getMechanism() {
+        for (Element element : elements) {
+            if (element instanceof MechanismElement) {
+                return (MechanismElement) element;
+            }
+        }
+        return null;
+    }
+
+    public AccumulatorElement getAccumulator() {
+        for (Element element : elements) {
+            if (element instanceof AccumulatorElement) {
+                return (AccumulatorElement) element;
             }
         }
         return null;

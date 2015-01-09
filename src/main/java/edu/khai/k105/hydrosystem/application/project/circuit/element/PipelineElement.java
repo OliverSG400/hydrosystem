@@ -4,6 +4,7 @@ import edu.khai.k105.hydrosystem.application.project.circuit.Circuit;
 import edu.khai.k105.hydrosystem.application.project.circuit.Fluid;
 import edu.khai.k105.hydrosystem.application.project.graph.GraphPoint;
 import edu.khai.k105.hydrosystem.application.project.graph.GraphSeries;
+import edu.khai.k105.hydrosystem.application.project.graph.GraphStage;
 
 import javax.xml.bind.annotation.*;
 import java.util.List;
@@ -39,7 +40,7 @@ public class PipelineElement extends Element {
     }
 
     @Override
-    public double deltaP(double pumpQ, Fluid fluid, double gravityAcceleration) {
+    public double deltaP(GraphStage mechanismStage, double pumpQ, Fluid fluid, double gravityAcceleration) {
         double deltaP = 0;
         if (pumpQ != 0) {
             double reynolds = (4 * pumpQ)

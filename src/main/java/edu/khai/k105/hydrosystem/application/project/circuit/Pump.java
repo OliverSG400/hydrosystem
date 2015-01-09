@@ -21,7 +21,4 @@ public class Pump {
         return pumpCharacteristic;
     }
 
-    public void setPumpCharacteristic(GraphSeries pumpCharacteristic) {
-        this.pumpCharacteristic = pumpCharacteristic;
-    }
 }
