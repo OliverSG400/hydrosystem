@@ -39,12 +39,16 @@ public class OperatingPointViewer implements Recalculator{
         graphModel.addSeries(circuit.getPump().getPumpCharacteristic());
         graphModel.addSeries(circuit.systemCharacteristic(mechanismStage));
         GraphPoint operatingPoint = circuit.operatingPoint(mechanismStage);
-        GraphSeries operatingPointSeries = new GraphSeries();
-        operatingPointSeries.addPoint(operatingPoint);
-        graphModel.addSeries(operatingPointSeries);
+        if (operatingPoint != null) {
+            GraphSeries operatingPointSeries = new GraphSeries();
+            operatingPointSeries.addPoint(operatingPoint);
+            graphModel.addSeries(operatingPointSeries);
+            operatingPointLabel.setText(operatingPoint.toString());
+        } else {
+            operatingPointLabel.setText("отсутствует");
+        }
         graphPanel.setModel(graphModel);
         graphPanel.adaptScale();
-        operatingPointLabel.setText(operatingPoint.toString());
     }
 
     private void createUIComponents() {

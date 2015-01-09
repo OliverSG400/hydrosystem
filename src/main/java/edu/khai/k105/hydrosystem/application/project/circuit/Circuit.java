@@ -78,7 +78,8 @@ public class Circuit {
                 [pump.getPumpCharacteristic().getPoints().size()];
         for (int e = 0; e < elements.size(); e++) {
             for (int q = 0; q < pump.getPumpCharacteristic().getPoints().size(); q++) {
-                data[e][q] = elements.get(e).deltaP(mechanismStage, q, workingFluid, gravityAcceleration);
+                double pumpQ = pump.getPumpCharacteristic().getPoints().get(q).x;
+                data[e][q] = elements.get(e).deltaP(mechanismStage, pumpQ, workingFluid, gravityAcceleration);
             }
         }
         return data;

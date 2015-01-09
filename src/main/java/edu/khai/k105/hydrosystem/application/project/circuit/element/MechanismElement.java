@@ -40,7 +40,7 @@ public class MechanismElement extends Element {
 //
 //        Th[k]:=DeltaP;
 //        W[k]:=W[K]+DeltaP;
-        double deltaP = this.getVariableLoadCharacteristic().getPoints().get(1).y / pistonSquare;
+        double deltaP = mechanismStage.getValue() / pistonSquare;
         return deltaP;
     }
 
