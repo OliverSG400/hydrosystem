@@ -22,7 +22,7 @@ import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
 import java.util.List;
 
-public class HydraulicEditor {
+public class SchemeEditor {
 
     private JPanel contentPane;
     private JTree projectTree;
@@ -33,7 +33,7 @@ public class HydraulicEditor {
         return contentPane;
     }
 
-    public HydraulicEditor(Application application) {
+    public SchemeEditor(Application application) {
         this.application = application;
         projectTree.setModel(new ProjectTreeModel(application.getCurrentProject()));
         projectTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);

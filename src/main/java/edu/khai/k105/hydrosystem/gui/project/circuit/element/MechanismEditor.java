@@ -4,7 +4,7 @@ import edu.khai.k105.hydrosystem.application.project.circuit.element.MechanismEl
 import edu.khai.k105.hydrosystem.gui.graph.GraphEditor;
 import edu.khai.k105.hydrosystem.application.project.graph.GraphModel;
 import edu.khai.k105.hydrosystem.application.project.graph.GraphSeries;
-import edu.khai.k105.hydrosystem.gui.project.circuit.HydraulicEditor;
+import edu.khai.k105.hydrosystem.gui.project.circuit.SchemeEditor;
 import edu.khai.k105.hydrosystem.gui.project.circuit.ProjectTreeModel;
 import edu.khai.k105.hydrosystem.application.project.Project;
 import edu.khai.k105.hydrosystem.gui.validation.NoCharacterVerifier;
@@ -22,7 +22,7 @@ public class MechanismEditor {
     private JButton removeElementButton;
     private MechanismElement mechanismElement;
 
-    public MechanismEditor(final MechanismElement mechanismElement, final Project currentProject, final HydraulicEditor hydraulicEditor) {
+    public MechanismEditor(final MechanismElement mechanismElement, final Project currentProject, final SchemeEditor schemeEditor) {
         this.mechanismElement = mechanismElement;
         pistonSquareTextField.setText(String.valueOf(mechanismElement.getPistonSquare()));
         pistonSquareTextField.setInputVerifier(NoCharacterVerifier.getInstance());
@@ -48,8 +48,8 @@ public class MechanismEditor {
             @Override
             public void actionPerformed(ActionEvent e) {
                 currentProject.getCircuit().getElements().remove(mechanismElement);
-                hydraulicEditor.getProjectTree().setModel(new ProjectTreeModel(currentProject));
-                expandAll(hydraulicEditor.getProjectTree());
+                schemeEditor.getProjectTree().setModel(new ProjectTreeModel(currentProject));
+                expandAll(schemeEditor.getProjectTree());
             }
         });
     }

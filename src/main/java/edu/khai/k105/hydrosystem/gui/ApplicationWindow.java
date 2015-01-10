@@ -1,11 +1,8 @@
 package edu.khai.k105.hydrosystem.gui;
 
 import edu.khai.k105.hydrosystem.application.Application;
-import edu.khai.k105.hydrosystem.application.project.graph.GraphModel;
-import edu.khai.k105.hydrosystem.application.project.graph.GraphPoint;
-import edu.khai.k105.hydrosystem.gui.project.calculation.OperatingPointViewer;
-import edu.khai.k105.hydrosystem.gui.project.calculation.PressureLosses;
-import edu.khai.k105.hydrosystem.gui.project.circuit.HydraulicEditor;
+import edu.khai.k105.hydrosystem.gui.project.calculation.CalculationViewer;
+import edu.khai.k105.hydrosystem.gui.project.circuit.SchemeEditor;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
@@ -23,11 +20,11 @@ public class ApplicationWindow extends JFrame implements Runnable {
     private JMenuItem saveProjectMenuItem;
     private JMenuItem saveAsProjectMenuItem;
     private JMenuItem exitMenuItem;
-    private JMenu editMenu;
-    private JMenu calculationMenu;
-    private JMenuItem calculatePressureLossesMenuItem;
-    private JMenuItem calculateOperatingPointMenuItem;
-    private HydraulicEditor hydraulicEditor;
+    private JMenu modeMenu;
+    private JRadioButtonMenuItem editorModeMenuItem;
+    private JRadioButtonMenuItem viewerModeMenuItem;
+    private SchemeEditor schemeEditor;
+    private CalculationViewer calculationViewer;
     private Application application;
 
     public ApplicationWindow(Application application) {
@@ -41,13 +38,13 @@ public class ApplicationWindow extends JFrame implements Runnable {
         setJMenuBar(getMenu());
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-//            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
 //            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
             SwingUtilities.updateComponentTreeUI(this);
         } catch (Exception e){
             System.out.println("Ошибка при загрузке Metal-Look-And-Feel");
         }
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setContentPane(new InitPanel().getContentPane());
         setPreferredSize(new Dimension(800, 600));
         pack();
         setLocationRelativeTo(null);
@@ -59,8 +56,7 @@ public class ApplicationWindow extends JFrame implements Runnable {
         if (menuBar == null) {
             menuBar = new JMenuBar();
             menuBar.add(getProjectJMenu());
-            menuBar.add(getEditJMenu());
-            menuBar.add(getCalculationJMenu());
+            menuBar.add(getModeMenu());
         }
         return menuBar;
     }
@@ -81,6 +77,7 @@ public class ApplicationWindow extends JFrame implements Runnable {
     private JMenuItem getCreateProjectMenuItem() {
         if (createProjectMenuItem == null) {
             createProjectMenuItem = new JMenuItem("Создать");
+            createProjectMenuItem.setAccelerator(KeyStroke.getKeyStroke("control N"));
             createProjectMenuItem.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -94,6 +91,7 @@ public class ApplicationWindow extends JFrame implements Runnable {
     private JMenuItem getOpenProjectMenuItem() {
         if (openProjectMenuItem == null) {
             openProjectMenuItem = new JMenuItem("Открыть");
+            openProjectMenuItem.setAccelerator(KeyStroke.getKeyStroke("control O"));
             openProjectMenuItem.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -107,9 +105,8 @@ public class ApplicationWindow extends JFrame implements Runnable {
     private JMenuItem getSaveProjectMenuItem() {
         if (saveProjectMenuItem == null) {
             saveProjectMenuItem = new JMenuItem("Сохранить");
-            saveProjectMenuItem.setAccelerator(KeyStroke.getKeyStroke(
-                    java.awt.event.KeyEvent.VK_S,
-                    java.awt.Event.CTRL_MASK));
+            saveProjectMenuItem.setAccelerator(KeyStroke.getKeyStroke("control S"));
+            saveProjectMenuItem.setEnabled(false);
             saveProjectMenuItem.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -123,6 +120,8 @@ public class ApplicationWindow extends JFrame implements Runnable {
     private JMenuItem getSaveAsProjectMenuItem() {
         if (saveAsProjectMenuItem == null) {
             saveAsProjectMenuItem = new JMenuItem("Сохранить как");
+            saveAsProjectMenuItem.setAccelerator(KeyStroke.getKeyStroke("control alt S"));
+            saveAsProjectMenuItem.setEnabled(false);
             saveAsProjectMenuItem.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -136,6 +135,7 @@ public class ApplicationWindow extends JFrame implements Runnable {
     private JMenuItem getExitMenuItem() {
         if (exitMenuItem == null) {
             exitMenuItem = new JMenuItem("Выход");
+            exitMenuItem.setAccelerator(KeyStroke.getKeyStroke("control Q"));
             exitMenuItem.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -146,10 +146,19 @@ public class ApplicationWindow extends JFrame implements Runnable {
         return exitMenuItem;
     }
 
-    private void openProjectEditor() {
-        hydraulicEditor = new HydraulicEditor(application);
-        setContentPane(hydraulicEditor.getContentPane());
-        validate();
+    private void createProject() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new HSPFileFilter());
+        if (application.getCurrentProjectFile() != null) {
+            fileChooser.setCurrentDirectory(application.getCurrentProjectFile().getParentFile());
+        }
+        int ret = fileChooser.showSaveDialog(this);
+        if (ret == JFileChooser.APPROVE_OPTION) {
+            application.createNewProject(fileChooser.getSelectedFile());
+            setTitle(application.getCurrentProject().getTitle());
+            enableAllMenus();
+            editorModeMenuItem.doClick();
+        }
     }
 
     private void openProject() {
@@ -162,7 +171,8 @@ public class ApplicationWindow extends JFrame implements Runnable {
         if (ret == JFileChooser.APPROVE_OPTION) {
             application.openProject(fileChooser.getSelectedFile());
             setTitle(application.getCurrentProject().getTitle());
-            openProjectEditor();
+            enableAllMenus();
+            editorModeMenuItem.doClick();
         }
     }
 
@@ -178,18 +188,63 @@ public class ApplicationWindow extends JFrame implements Runnable {
         }
     }
 
-    private void createProject() {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileFilter(new HSPFileFilter());
-        if (application.getCurrentProjectFile() != null) {
-            fileChooser.setCurrentDirectory(application.getCurrentProjectFile().getParentFile());
+    private JMenu getModeMenu() {
+        if (modeMenu == null) {
+            modeMenu = new JMenu("Режим");
+            ButtonGroup modesGroup = new ButtonGroup();
+            modesGroup.add(getEditorModeMenuItem());
+            modesGroup.add(getViewerModeMenuItem());
+            modeMenu.add(getEditorModeMenuItem());
+            modeMenu.add(getViewerModeMenuItem());
+            modeMenu.setEnabled(false);
         }
-        int ret = fileChooser.showSaveDialog(this);
-        if (ret == JFileChooser.APPROVE_OPTION) {
-            application.createNewProject(fileChooser.getSelectedFile());
-            setTitle(application.getCurrentProject().getTitle());
-            openProjectEditor();
+        return modeMenu;
+    }
+
+    private JRadioButtonMenuItem getEditorModeMenuItem() {
+        if (editorModeMenuItem == null) {
+            editorModeMenuItem = new JRadioButtonMenuItem("Редактирование");
+            editorModeMenuItem.setAccelerator(KeyStroke.getKeyStroke("control E"));
+            editorModeMenuItem.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    openProjectSchemeEditor();
+                }
+            });
         }
+        return editorModeMenuItem;
+    }
+
+    private JRadioButtonMenuItem getViewerModeMenuItem() {
+        if (viewerModeMenuItem == null) {
+            viewerModeMenuItem = new JRadioButtonMenuItem("Просмотр результатов");
+            viewerModeMenuItem.setAccelerator(KeyStroke.getKeyStroke("control R"));
+            viewerModeMenuItem.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    openProjectCalculationViewer();
+                }
+            });
+        }
+        return viewerModeMenuItem;
+    }
+
+    private void openProjectSchemeEditor() {
+        schemeEditor = new SchemeEditor(application);
+        setContentPane(schemeEditor.getContentPane());
+        validate();
+    }
+
+    private void openProjectCalculationViewer() {
+        calculationViewer = new CalculationViewer(application.getCurrentProject().getCircuit());
+        setContentPane(calculationViewer.getContentPane());
+        validate();
+    }
+
+    private void enableAllMenus() {
+        modeMenu.setEnabled(true);
+        saveProjectMenuItem.setEnabled(true);
+        saveAsProjectMenuItem.setEnabled(true);
     }
 
     private class HSPFileFilter extends FileFilter {
@@ -207,62 +262,6 @@ public class ApplicationWindow extends JFrame implements Runnable {
             }
             return false;
         }
-    }
-
-    private JMenu getEditJMenu() {
-        if (editMenu == null) {
-            editMenu = new JMenu("Редактировать");
-        }
-        return editMenu;
-    }
-
-    private JMenu getCalculationJMenu() {
-        if (calculationMenu == null) {
-            calculationMenu = new JMenu("Расчет");
-            calculationMenu.add(getCalculatePressureLossesMenuItem());
-            calculationMenu.add(getCalculateOperatingPointMenuItem());
-        }
-        return calculationMenu;
-    }
-
-    private JMenuItem getCalculatePressureLossesMenuItem() {
-        if (calculatePressureLossesMenuItem == null) {
-            calculatePressureLossesMenuItem = new JMenuItem("Потери давления");
-            calculatePressureLossesMenuItem.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    JFrame frame = new JFrame("Потери давления");
-                    frame.setContentPane(new PressureLosses(application.getCurrentProject().getCircuit())
-                            .getContentPane());
-                    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                    frame.pack();
-                    frame.setLocationRelativeTo(null);
-                    frame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
-                    frame.setVisible(true);
-                }
-            });
-        }
-        return calculatePressureLossesMenuItem;
-    }
-
-    private JMenuItem getCalculateOperatingPointMenuItem() {
-        if (calculateOperatingPointMenuItem == null) {
-            calculateOperatingPointMenuItem = new JMenuItem("Рабочая точка");
-            calculateOperatingPointMenuItem.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    JFrame frame = new JFrame("Рабочая точка");
-                    frame.setContentPane(new OperatingPointViewer(application.getCurrentProject().getCircuit())
-                            .getContentPane());
-                    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                    frame.pack();
-                    frame.setLocationRelativeTo(null);
-                    frame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
-                    frame.setVisible(true);
-                }
-            });
-        }
-        return calculateOperatingPointMenuItem;
     }
 
 }

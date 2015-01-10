@@ -29,6 +29,6 @@ public class GraphStage {
 
     @Override
     public String toString() {
-        return "(" + base.getA().x + "; " + base.getB().x + ") (" + String.format("%.2f", value) +")";
+        return "(" + String.format("%.4f", base.getA().x) + "; " + String.format("%.4f", base.getB().x) + ") (" + String.format("%.2f", value) +")";
     }
 }

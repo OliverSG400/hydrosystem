@@ -23,7 +23,7 @@
               </grid>
             </constraints>
             <properties>
-              <text resource-bundle="label" key="kinematic viscosity"/>
+              <text value="Коэффициент кинематической вязкости"/>
             </properties>
           </component>
           <hspacer id="a9010">
@@ -69,7 +69,7 @@
               </grid>
             </constraints>
             <properties>
-              <text resource-bundle="label" key="specific weight"/>
+              <text value="Удельный вес"/>
             </properties>
           </component>
           <hspacer id="9d0cf">

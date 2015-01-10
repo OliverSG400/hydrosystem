@@ -2,7 +2,7 @@ package edu.khai.k105.hydrosystem.gui.project.circuit.element;
 
 import edu.khai.k105.hydrosystem.application.project.Project;
 import edu.khai.k105.hydrosystem.application.project.circuit.element.AccumulatorElement;
-import edu.khai.k105.hydrosystem.gui.project.circuit.HydraulicEditor;
+import edu.khai.k105.hydrosystem.gui.project.circuit.SchemeEditor;
 import edu.khai.k105.hydrosystem.gui.project.circuit.ProjectTreeModel;
 import edu.khai.k105.hydrosystem.gui.validation.NoCharacterVerifier;
 
@@ -21,7 +21,7 @@ public class AccumulatorEditor {
     private JFormattedTextField politropaTextField;
     private JButton removeElementButton;
 
-    public AccumulatorEditor(final AccumulatorElement accumulatorElement, final Project currentProject, final HydraulicEditor hydraulicEditor) {
+    public AccumulatorEditor(final AccumulatorElement accumulatorElement, final Project currentProject, final SchemeEditor schemeEditor) {
         maxPressureTextField.setText(String.valueOf(accumulatorElement.getMaxPressure()));
         minVolumeTextField.setText(String.valueOf(accumulatorElement.getMinVolume()));
         minPressureTextField.setText(String.valueOf(accumulatorElement.getMinPressure()));
@@ -96,8 +96,8 @@ public class AccumulatorEditor {
             @Override
             public void actionPerformed(ActionEvent e) {
                 currentProject.getCircuit().getElements().remove(accumulatorElement);
-                hydraulicEditor.getProjectTree().setModel(new ProjectTreeModel(currentProject));
-                expandAll(hydraulicEditor.getProjectTree());
+                schemeEditor.getProjectTree().setModel(new ProjectTreeModel(currentProject));
+                expandAll(schemeEditor.getProjectTree());
             }
         });
     }

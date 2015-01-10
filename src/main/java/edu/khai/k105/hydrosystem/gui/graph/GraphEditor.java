@@ -2,6 +2,7 @@ package edu.khai.k105.hydrosystem.gui.graph;
 
 import edu.khai.k105.hydrosystem.application.project.graph.GraphModel;
 import edu.khai.k105.hydrosystem.application.project.graph.GraphPoint;
+import edu.khai.k105.hydrosystem.gui.validation.NoCharacterVerifier;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -19,6 +20,8 @@ public class GraphEditor {
     private JPanel contentPane;
 
     public GraphEditor(GraphModel graph) {
+        xField.setInputVerifier(NoCharacterVerifier.getInstance());
+        yField.setInputVerifier(NoCharacterVerifier.getInstance());
         graphPanel.setModel(graph);
         graphPanel.adaptScale();
         bindListeners();
@@ -29,8 +32,6 @@ public class GraphEditor {
     }
 
     private void bindListeners() {
-
-
 
         graphPanel.addMouseListener(new MouseAdapter() {
 

@@ -1,6 +1,5 @@
 package edu.khai.k105.hydrosystem.gui.project.calculation;
 
-import edu.khai.k105.hydrosystem.application.project.circuit.element.MechanismElement;
 import edu.khai.k105.hydrosystem.application.project.graph.GraphStage;
 
 import javax.swing.*;
@@ -14,9 +13,9 @@ public class Pager {
     private JButton nextButton;
     private JPanel contentPane;
     private List<GraphStage> stageGraph;
-    private Recalculator recalculator;
+    private Viewer recalculator;
 
-    public Pager(List<GraphStage> stageGraph, final Recalculator recalculator) {
+    public Pager(List<GraphStage> stageGraph, final Viewer recalculator) {
         this.stageGraph = stageGraph;
         this.recalculator = recalculator;
         sectionComboBox.addActionListener(new ActionListener() {

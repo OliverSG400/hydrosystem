@@ -9,25 +9,19 @@ import edu.khai.k105.hydrosystem.gui.graph.JGraph;
 
 import javax.swing.*;
 
-public class OperatingPointViewer implements Recalculator{
+public class OperatingPointViewer implements Viewer {
     private JPanel contentPane;
-    private JPanel propertiesPane;
     private JGraph graphPanel;
     private JLabel operatingPointLabel;
-    private Pager pager;
     private Circuit circuit;
 
-    public OperatingPointViewer(Circuit circuit) {
+    public OperatingPointViewer(Circuit circuit, JLabel operatingPointLabel) {
         this.circuit = circuit;
-        recalculate(pager.getCurrentStageGraph());
+        this.operatingPointLabel = operatingPointLabel;
     }
 
     public JPanel getContentPane() {
         return contentPane;
-    }
-
-    public JGraph getGraphPanel() {
-        return graphPanel;
     }
 
     @Override
@@ -48,7 +42,4 @@ public class OperatingPointViewer implements Recalculator{
         graphPanel.adaptScale();
     }
 
-    private void createUIComponents() {
-        pager = new Pager(circuit.getMechanism().getStageGraph(), this);
-    }
 }

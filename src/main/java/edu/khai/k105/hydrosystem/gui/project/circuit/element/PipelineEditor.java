@@ -1,7 +1,7 @@
 package edu.khai.k105.hydrosystem.gui.project.circuit.element;
 
 import edu.khai.k105.hydrosystem.application.project.circuit.element.PipelineElement;
-import edu.khai.k105.hydrosystem.gui.project.circuit.HydraulicEditor;
+import edu.khai.k105.hydrosystem.gui.project.circuit.SchemeEditor;
 import edu.khai.k105.hydrosystem.gui.project.circuit.ProjectTreeModel;
 import edu.khai.k105.hydrosystem.application.project.Project;
 import edu.khai.k105.hydrosystem.gui.validation.NoCharacterVerifier;
@@ -19,7 +19,7 @@ public class PipelineEditor {
     private JButton removeElementButton;
     private PipelineElement pipelineElement;
 
-    public PipelineEditor(final PipelineElement pipelineElement, final Project currentProject, final HydraulicEditor hydraulicEditor) {
+    public PipelineEditor(final PipelineElement pipelineElement, final Project currentProject, final SchemeEditor schemeEditor) {
         this.pipelineElement = pipelineElement;
         lengthTextField.setText(String.valueOf(pipelineElement.getLength()));
         diameterTextField.setText(String.valueOf(pipelineElement.getDiameter()));
@@ -53,8 +53,8 @@ public class PipelineEditor {
             @Override
             public void actionPerformed(ActionEvent e) {
                 currentProject.getCircuit().getElements().remove(pipelineElement);
-                hydraulicEditor.getProjectTree().setModel(new ProjectTreeModel(currentProject));
-                expandAll(hydraulicEditor.getProjectTree());
+                schemeEditor.getProjectTree().setModel(new ProjectTreeModel(currentProject));
+                expandAll(schemeEditor.getProjectTree());
                 //hydraulicEditor.getContentPane().removeAll();
             }
         });

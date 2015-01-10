@@ -1,7 +1,7 @@
 package edu.khai.k105.hydrosystem.gui.project.circuit.element;
 
 import edu.khai.k105.hydrosystem.application.project.circuit.element.ResistanceElement;
-import edu.khai.k105.hydrosystem.gui.project.circuit.HydraulicEditor;
+import edu.khai.k105.hydrosystem.gui.project.circuit.SchemeEditor;
 import edu.khai.k105.hydrosystem.gui.project.circuit.ProjectTreeModel;
 import edu.khai.k105.hydrosystem.application.project.Project;
 import edu.khai.k105.hydrosystem.gui.validation.NoCharacterVerifier;
@@ -20,7 +20,7 @@ public class ResistanceEditor {
     private JButton removeElementButton;
     private ResistanceElement resistanceElement;
 
-    public ResistanceEditor(final ResistanceElement resistanceElement, final Project currentProject, final HydraulicEditor hydraulicEditor) {
+    public ResistanceEditor(final ResistanceElement resistanceElement, final Project currentProject, final SchemeEditor schemeEditor) {
         this.resistanceElement = resistanceElement;
         coefficientTextField.setText(String.valueOf(resistanceElement.getCoefficient()));
         inputDiameterTextField.setText(String.valueOf(resistanceElement.getInputDiameter()));
@@ -61,8 +61,8 @@ public class ResistanceEditor {
             @Override
             public void actionPerformed(ActionEvent e) {
                 currentProject.getCircuit().getElements().remove(resistanceElement);
-                hydraulicEditor.getProjectTree().setModel(new ProjectTreeModel(currentProject));
-                expandAll(hydraulicEditor.getProjectTree());
+                schemeEditor.getProjectTree().setModel(new ProjectTreeModel(currentProject));
+                expandAll(schemeEditor.getProjectTree());
             }
         });
     }
