@@ -1,6 +1,7 @@
 package edu.khai.k105.hydrosystem.gui.project.circuit;
 
 import edu.khai.k105.hydrosystem.application.project.circuit.Fluid;
+import edu.khai.k105.hydrosystem.gui.validation.NoCharacterVerifier;
 
 import javax.swing.*;
 import java.awt.event.FocusAdapter;
@@ -19,6 +20,8 @@ public class FluidEditor {
         this.fluid = fluid;
         kinematicalViscosityTextField.setText(String.valueOf(fluid.getKinematicalViscosity()));
         specificWeightTextField.setText(String.valueOf(fluid.getSpecificWeight()));
+        kinematicalViscosityTextField.setInputVerifier(NoCharacterVerifier.getInstance());
+        specificWeightTextField.setInputVerifier(NoCharacterVerifier.getInstance());
         kinematicalViscosityTextField.addFocusListener(new FocusAdapter() {
             @Override
             public void focusLost(FocusEvent e) {

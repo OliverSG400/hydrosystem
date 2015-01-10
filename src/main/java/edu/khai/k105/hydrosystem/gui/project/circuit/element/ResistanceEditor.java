@@ -4,6 +4,7 @@ import edu.khai.k105.hydrosystem.application.project.circuit.element.ResistanceE
 import edu.khai.k105.hydrosystem.gui.project.circuit.HydraulicEditor;
 import edu.khai.k105.hydrosystem.gui.project.circuit.ProjectTreeModel;
 import edu.khai.k105.hydrosystem.application.project.Project;
+import edu.khai.k105.hydrosystem.gui.validation.NoCharacterVerifier;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -24,6 +25,8 @@ public class ResistanceEditor {
         coefficientTextField.setText(String.valueOf(resistanceElement.getCoefficient()));
         inputDiameterTextField.setText(String.valueOf(resistanceElement.getInputDiameter()));
         typeComboBox.setSelectedItem(resistanceElement.getType());
+        coefficientTextField.setInputVerifier(NoCharacterVerifier.getInstance());
+        inputDiameterTextField.setInputVerifier(NoCharacterVerifier.getInstance());
         coefficientTextField.addFocusListener(new FocusAdapter() {
             @Override
             public void focusLost(FocusEvent e) {

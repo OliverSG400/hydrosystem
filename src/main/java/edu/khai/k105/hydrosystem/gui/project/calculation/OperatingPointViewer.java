@@ -1,16 +1,13 @@
 package edu.khai.k105.hydrosystem.gui.project.calculation;
 
-import edu.khai.k105.hydrosystem.application.project.Project;
 import edu.khai.k105.hydrosystem.application.project.circuit.Circuit;
 import edu.khai.k105.hydrosystem.application.project.graph.GraphModel;
 import edu.khai.k105.hydrosystem.application.project.graph.GraphPoint;
 import edu.khai.k105.hydrosystem.application.project.graph.GraphSeries;
 import edu.khai.k105.hydrosystem.application.project.graph.GraphStage;
-import edu.khai.k105.hydrosystem.gui.project.graph.JGraph;
+import edu.khai.k105.hydrosystem.gui.graph.JGraph;
 
 import javax.swing.*;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 
 public class OperatingPointViewer implements Recalculator{
     private JPanel contentPane;

@@ -4,6 +4,7 @@ import edu.khai.k105.hydrosystem.application.project.circuit.element.PipelineEle
 import edu.khai.k105.hydrosystem.gui.project.circuit.HydraulicEditor;
 import edu.khai.k105.hydrosystem.gui.project.circuit.ProjectTreeModel;
 import edu.khai.k105.hydrosystem.application.project.Project;
+import edu.khai.k105.hydrosystem.gui.validation.NoCharacterVerifier;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -11,9 +12,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
-/**
- * Created by Oliver on 03.01.2015.
- */
 public class PipelineEditor {
     private JPanel contentPane;
     private JFormattedTextField lengthTextField;
@@ -25,6 +23,8 @@ public class PipelineEditor {
         this.pipelineElement = pipelineElement;
         lengthTextField.setText(String.valueOf(pipelineElement.getLength()));
         diameterTextField.setText(String.valueOf(pipelineElement.getDiameter()));
+        lengthTextField.setInputVerifier(NoCharacterVerifier.getInstance());
+        diameterTextField.setInputVerifier(NoCharacterVerifier.getInstance());
         lengthTextField.addFocusListener(new FocusAdapter() {
             @Override
             public void focusLost(FocusEvent e) {

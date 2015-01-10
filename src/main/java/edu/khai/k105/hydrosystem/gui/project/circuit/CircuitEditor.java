@@ -1,6 +1,7 @@
 package edu.khai.k105.hydrosystem.gui.project.circuit;
 
 import edu.khai.k105.hydrosystem.application.project.circuit.Circuit;
+import edu.khai.k105.hydrosystem.gui.validation.NoCharacterVerifier;
 
 import javax.swing.*;
 import java.awt.event.FocusAdapter;
@@ -17,6 +18,7 @@ public class CircuitEditor {
     public CircuitEditor(final Circuit circuit) {
         this.circuit = circuit;
         gravityAccelerationTextField.setText(String.valueOf(circuit.getGravityAcceleration()));
+        gravityAccelerationTextField.setInputVerifier(NoCharacterVerifier.getInstance());
         gravityAccelerationTextField.addFocusListener(new FocusAdapter() {
             @Override
             public void focusLost(FocusEvent e) {

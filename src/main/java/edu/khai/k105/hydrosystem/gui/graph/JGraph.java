@@ -1,4 +1,4 @@
-package edu.khai.k105.hydrosystem.gui.project.graph;
+package edu.khai.k105.hydrosystem.gui.graph;
 
 import edu.khai.k105.hydrosystem.application.project.graph.GraphModel;
 import edu.khai.k105.hydrosystem.application.project.graph.GraphPoint;

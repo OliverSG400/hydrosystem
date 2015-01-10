@@ -1,12 +1,13 @@
 package edu.khai.k105.hydrosystem.gui.project.circuit.element;
 
 import edu.khai.k105.hydrosystem.application.project.circuit.element.MechanismElement;
-import edu.khai.k105.hydrosystem.gui.project.graph.GraphEditor;
+import edu.khai.k105.hydrosystem.gui.graph.GraphEditor;
 import edu.khai.k105.hydrosystem.application.project.graph.GraphModel;
 import edu.khai.k105.hydrosystem.application.project.graph.GraphSeries;
 import edu.khai.k105.hydrosystem.gui.project.circuit.HydraulicEditor;
 import edu.khai.k105.hydrosystem.gui.project.circuit.ProjectTreeModel;
 import edu.khai.k105.hydrosystem.application.project.Project;
+import edu.khai.k105.hydrosystem.gui.validation.NoCharacterVerifier;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -14,9 +15,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
-/**
- * Created by Oliver on 03.01.2015.
- */
 public class MechanismEditor {
     private JPanel contentPane;
     private JFormattedTextField pistonSquareTextField;
@@ -27,6 +25,7 @@ public class MechanismEditor {
     public MechanismEditor(final MechanismElement mechanismElement, final Project currentProject, final HydraulicEditor hydraulicEditor) {
         this.mechanismElement = mechanismElement;
         pistonSquareTextField.setText(String.valueOf(mechanismElement.getPistonSquare()));
+        pistonSquareTextField.setInputVerifier(NoCharacterVerifier.getInstance());
         pistonSquareTextField.addFocusListener(new FocusAdapter() {
             @Override
             public void focusLost(FocusEvent e) {

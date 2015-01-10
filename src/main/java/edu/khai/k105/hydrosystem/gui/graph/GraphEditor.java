@@ -1,13 +1,11 @@
-package edu.khai.k105.hydrosystem.gui.project.graph;
+package edu.khai.k105.hydrosystem.gui.graph;
 
 import edu.khai.k105.hydrosystem.application.project.graph.GraphModel;
 import edu.khai.k105.hydrosystem.application.project.graph.GraphPoint;
-import edu.khai.k105.hydrosystem.gui.project.graph.JGraph;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import java.awt.*;
 import java.awt.event.*;
 
 public class GraphEditor {

@@ -4,6 +4,7 @@ import edu.khai.k105.hydrosystem.application.project.Project;
 import edu.khai.k105.hydrosystem.application.project.circuit.element.AccumulatorElement;
 import edu.khai.k105.hydrosystem.gui.project.circuit.HydraulicEditor;
 import edu.khai.k105.hydrosystem.gui.project.circuit.ProjectTreeModel;
+import edu.khai.k105.hydrosystem.gui.validation.NoCharacterVerifier;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -26,6 +27,11 @@ public class AccumulatorEditor {
         minPressureTextField.setText(String.valueOf(accumulatorElement.getMinPressure()));
         maxVolumeTextField.setText(String.valueOf(accumulatorElement.getMaxVolume()));
         politropaTextField.setText(String.valueOf(accumulatorElement.getPolitropa()));
+        maxPressureTextField.setInputVerifier(NoCharacterVerifier.getInstance());
+        minVolumeTextField.setInputVerifier(NoCharacterVerifier.getInstance());
+        minPressureTextField.setInputVerifier(NoCharacterVerifier.getInstance());
+        maxVolumeTextField.setInputVerifier(NoCharacterVerifier.getInstance());
+        politropaTextField.setInputVerifier(NoCharacterVerifier.getInstance());
         maxPressureTextField.addFocusListener(new FocusAdapter() {
             @Override
             public void focusLost(FocusEvent e) {

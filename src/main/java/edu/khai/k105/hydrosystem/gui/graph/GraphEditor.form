@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="edu.khai.k105.hydrosystem.gui.project.graph.GraphEditor">
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="edu.khai.k105.hydrosystem.gui.graph.GraphEditor">
   <grid id="27dc6" binding="contentPane" layout-manager="GridLayoutManager" row-count="2" column-count="7" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="5" left="5" bottom="5" right="5"/>
     <constraints>
@@ -56,7 +56,7 @@
           </component>
         </children>
       </scrollpane>
-      <component id="6ad06" class="edu.khai.k105.hydrosystem.gui.project.graph.JGraph" binding="graphPanel">
+      <component id="6ad06" class="edu.khai.k105.hydrosystem.gui.graph.JGraph" binding="graphPanel">
         <constraints>
           <grid row="1" column="6" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
