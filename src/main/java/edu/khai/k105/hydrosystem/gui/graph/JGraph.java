@@ -1,8 +1,8 @@
 package edu.khai.k105.hydrosystem.gui.graph;
 
-import edu.khai.k105.hydrosystem.application.project.graph.GraphModel;
-import edu.khai.k105.hydrosystem.application.project.graph.GraphPoint;
-import edu.khai.k105.hydrosystem.application.project.graph.GraphSeries;
+import edu.khai.k105.hydrosystem.application.graph.GraphModel;
+import edu.khai.k105.hydrosystem.application.graph.GraphPoint;
+import edu.khai.k105.hydrosystem.application.graph.GraphSeries;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,10 +19,11 @@ public class JGraph extends JPanel {
     private static final int GRID_MARGIN_RIGHT = 20;
     private static final int GRID_MARGIN_TOP = 20;
     private static final Color HIGHLIGHTED_SERIES = Color.BLUE;
-    private static final Color HIGHLIGHTED_POINT = Color.ORANGE;
+    private static final Color HIGHLIGHTED_POINT = Color.RED;
+    private static final Color REGULAR_DOT_COLOR = Color.BLACK;
     private double generalScaleModifier = 1;
-    private int xScaleModifier = 1;
-    private int yScaleModifier = 1;
+    private double xScaleModifier = 1;
+    private double yScaleModifier = 1;
     private Point shiftModifier = new Point(0, 0);
     private GraphModel model;
     private boolean adaptScale;
@@ -92,6 +93,8 @@ public class JGraph extends JPanel {
 
     public void setModel(GraphModel model) {
         this.model = model;
+        selectedSeries = model.getSeries().size() - 1;
+        selectedPoint = model.getSeries().get(selectedSeries).getPoints().size() - 1;
     }
 
     public Point translate(GraphPoint point) {
@@ -178,18 +181,20 @@ public class JGraph extends JPanel {
             double graphHeight = maxY - minY;
             int workingWidth = (getWidth() - GRID_MARGIN_LEFT - GRID_MARGIN_RIGHT - 40);
             int workingHeight = (getHeight() - GRID_MARGIN_TOP - GRID_MARGIN_BOTTOM - 40);
-
-//            while (graphWidth / xScaleModifier > workingWidth) {
-//                xScaleModifier *= 10;
-//            }
-//            while (graphHeight / yScaleModifier > workingHeight) {
-//                yScaleModifier *= 10;
-//            }
+            if(graphHeight > graphWidth) {
+                if (graphWidth != 0) {
+                    yScaleModifier = graphWidth / graphHeight;
+                }
+            } else {
+                if (graphHeight != 0) {
+                    xScaleModifier = graphHeight / graphWidth;
+                }
+            }
             int canvasMax = Math.max(workingWidth, workingHeight);
-            double graphMax = Math.max(graphWidth, graphHeight);
+            double graphMax = Math.max(graphWidth * xScaleModifier, graphHeight * yScaleModifier);
             generalScaleModifier = canvasMax / graphMax;
             setShiftModifier(new Point(-(int) Math.round(minX * getXScale()),
-                    -(int) Math.round(minY * getYScale() - getHeight()/2)));
+                    -(int) Math.round(minY * getYScale() ))); //- getHeight()/2
         }
         adaptScale = false;
     }
@@ -216,9 +221,9 @@ public class JGraph extends JPanel {
         g.drawString("Scale", startPoint.x, startPoint.y);
         g.drawString(": " + String.format("%.4f", generalScaleModifier), startPoint.x + 40, startPoint.y);
         g.drawString("x factor", startPoint.x, startPoint.y + 10);
-        g.drawString(": " + xScaleModifier, startPoint.x + 40, startPoint.y + 10);
+        g.drawString(": " + String.format("%.4f", xScaleModifier), startPoint.x + 40, startPoint.y + 10);
         g.drawString("y factor", startPoint.x, startPoint.y + 20);
-        g.drawString(": " + yScaleModifier, startPoint.x + 40, startPoint.y + 20);
+        g.drawString(": " + String.format("%.4f", yScaleModifier), startPoint.x + 40, startPoint.y + 20);
         g.drawString("x shift", startPoint.x, startPoint.y + 30);
         g.drawString(": " + shiftModifier.x, startPoint.x + 40, startPoint.y + 30);
         g.drawString("y shift", startPoint.x, startPoint.y + 40);
@@ -249,6 +254,8 @@ public class JGraph extends JPanel {
         drawLine(g, origin, yEnd);
         drawTopArrow(g, yEnd);
         drawOriginPoint(g, origin);
+        g.drawString("Па", 3, 30);
+        g.drawString("м³", getWidth() - 30, getHeight() - 5);
     }
 
     private void drawLine(Graphics g, Point p1, Point p2) {
@@ -301,12 +308,15 @@ public class JGraph extends JPanel {
 
     private void paintSeries(Graphics g, GraphSeries series) {
         //maybe change color from series meta
+        if (series.getMeta().get("series color") != null) {
+            g.setColor((Color) series.getMeta().get("series color"));
+        }
         GraphPoint previousGPoint = null;
         for (GraphPoint gPoint : series.getPoints()) {
             drawLine(g, translate(previousGPoint), translate(gPoint));
             previousGPoint = gPoint;
         }
-        g.setColor(Color.RED);
+        g.setColor(REGULAR_DOT_COLOR);
         for (GraphPoint gPoint : series.getPoints()) {
             paintDot(g, gPoint, 5);
         }

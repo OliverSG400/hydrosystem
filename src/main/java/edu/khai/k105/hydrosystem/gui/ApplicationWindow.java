@@ -3,6 +3,7 @@ package edu.khai.k105.hydrosystem.gui;
 import edu.khai.k105.hydrosystem.application.Application;
 import edu.khai.k105.hydrosystem.gui.project.calculation.CalculationViewer;
 import edu.khai.k105.hydrosystem.gui.project.circuit.SchemeEditor;
+import edu.khai.k105.hydrosystem.gui.report.Reporter;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
@@ -23,6 +24,8 @@ public class ApplicationWindow extends JFrame implements Runnable {
     private JMenu modeMenu;
     private JRadioButtonMenuItem editorModeMenuItem;
     private JRadioButtonMenuItem viewerModeMenuItem;
+    private JMenu reportMenu;
+    private JMenuItem generateReportMenuItem;
     private SchemeEditor schemeEditor;
     private CalculationViewer calculationViewer;
     private Application application;
@@ -57,6 +60,7 @@ public class ApplicationWindow extends JFrame implements Runnable {
             menuBar = new JMenuBar();
             menuBar.add(getProjectJMenu());
             menuBar.add(getModeMenu());
+            menuBar.add(getReportMenu());
         }
         return menuBar;
     }
@@ -241,10 +245,33 @@ public class ApplicationWindow extends JFrame implements Runnable {
         validate();
     }
 
+    private JMenu getReportMenu() {
+        if (reportMenu == null) {
+            reportMenu = new JMenu("Отчет");
+            reportMenu.setEnabled(false);
+            reportMenu.add(getGenerateReportMenuItem());
+        }
+        return reportMenu;
+    }
+
+    private JMenuItem getGenerateReportMenuItem() {
+        if (generateReportMenuItem == null) {
+            generateReportMenuItem = new JMenuItem("Составить");
+            generateReportMenuItem.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    new Reporter().createReport(application);
+                }
+            });
+        }
+        return generateReportMenuItem;
+    }
+
     private void enableAllMenus() {
         modeMenu.setEnabled(true);
         saveProjectMenuItem.setEnabled(true);
         saveAsProjectMenuItem.setEnabled(true);
+        reportMenu.setEnabled(true);
     }
 
     private class HSPFileFilter extends FileFilter {

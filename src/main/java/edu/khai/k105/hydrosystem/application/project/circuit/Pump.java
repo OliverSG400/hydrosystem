@@ -1,6 +1,6 @@
 package edu.khai.k105.hydrosystem.application.project.circuit;
 
-import edu.khai.k105.hydrosystem.application.project.graph.GraphSeries;
+import edu.khai.k105.hydrosystem.application.graph.GraphSeries;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

@@ -1,4 +1,4 @@
-package edu.khai.k105.hydrosystem.application.project.graph;
+package edu.khai.k105.hydrosystem.application.graph;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

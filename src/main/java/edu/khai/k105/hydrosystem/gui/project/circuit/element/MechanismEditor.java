@@ -2,8 +2,8 @@ package edu.khai.k105.hydrosystem.gui.project.circuit.element;
 
 import edu.khai.k105.hydrosystem.application.project.circuit.element.MechanismElement;
 import edu.khai.k105.hydrosystem.gui.graph.GraphEditor;
-import edu.khai.k105.hydrosystem.application.project.graph.GraphModel;
-import edu.khai.k105.hydrosystem.application.project.graph.GraphSeries;
+import edu.khai.k105.hydrosystem.application.graph.GraphModel;
+import edu.khai.k105.hydrosystem.application.graph.GraphSeries;
 import edu.khai.k105.hydrosystem.gui.project.circuit.SchemeEditor;
 import edu.khai.k105.hydrosystem.gui.project.circuit.ProjectTreeModel;
 import edu.khai.k105.hydrosystem.application.project.Project;

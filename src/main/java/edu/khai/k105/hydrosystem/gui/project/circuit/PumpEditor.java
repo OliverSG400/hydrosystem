@@ -2,8 +2,8 @@ package edu.khai.k105.hydrosystem.gui.project.circuit;
 
 import edu.khai.k105.hydrosystem.application.project.circuit.Pump;
 import edu.khai.k105.hydrosystem.gui.graph.GraphEditor;
-import edu.khai.k105.hydrosystem.application.project.graph.GraphModel;
-import edu.khai.k105.hydrosystem.application.project.graph.GraphSeries;
+import edu.khai.k105.hydrosystem.application.graph.GraphModel;
+import edu.khai.k105.hydrosystem.application.graph.GraphSeries;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

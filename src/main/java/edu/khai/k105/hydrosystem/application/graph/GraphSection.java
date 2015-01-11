@@ -1,6 +1,4 @@
-package edu.khai.k105.hydrosystem.application.project.graph;
-
-import edu.khai.k105.hydrosystem.application.project.graph.GraphPoint;
+package edu.khai.k105.hydrosystem.application.graph;
 
 public class GraphSection {
 

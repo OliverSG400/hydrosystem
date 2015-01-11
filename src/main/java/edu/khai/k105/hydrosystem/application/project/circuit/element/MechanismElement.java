@@ -1,9 +1,9 @@
 package edu.khai.k105.hydrosystem.application.project.circuit.element;
 
 import edu.khai.k105.hydrosystem.application.project.circuit.Fluid;
-import edu.khai.k105.hydrosystem.application.project.graph.GraphStage;
-import edu.khai.k105.hydrosystem.application.project.graph.GraphSection;
-import edu.khai.k105.hydrosystem.application.project.graph.GraphSeries;
+import edu.khai.k105.hydrosystem.application.graph.GraphStage;
+import edu.khai.k105.hydrosystem.application.graph.GraphSection;
+import edu.khai.k105.hydrosystem.application.graph.GraphSeries;
 
 import javax.xml.bind.annotation.*;
 import java.util.ArrayList;

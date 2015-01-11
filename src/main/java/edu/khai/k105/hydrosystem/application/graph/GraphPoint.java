@@ -1,4 +1,4 @@
-package edu.khai.k105.hydrosystem.application.project.graph;
+package edu.khai.k105.hydrosystem.application.graph;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -50,7 +50,7 @@ public class GraphPoint implements Serializable {
 
     @Override
     public String toString() {
-        return "[" + x + " | " + y + "]";
+        return "[" + String.format("%.4f", x) + " | " + String.format("%.4f", y) + "]";
     }
 
 }

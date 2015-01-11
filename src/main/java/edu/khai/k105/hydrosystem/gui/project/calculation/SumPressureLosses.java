@@ -1,8 +1,8 @@
 package edu.khai.k105.hydrosystem.gui.project.calculation;
 
 import edu.khai.k105.hydrosystem.application.project.circuit.Circuit;
-import edu.khai.k105.hydrosystem.application.project.graph.GraphPoint;
-import edu.khai.k105.hydrosystem.application.project.graph.GraphStage;
+import edu.khai.k105.hydrosystem.application.graph.GraphPoint;
+import edu.khai.k105.hydrosystem.application.graph.GraphStage;
 
 import javax.swing.*;
 import java.util.List;

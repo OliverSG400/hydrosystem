@@ -1,13 +1,14 @@
 package edu.khai.k105.hydrosystem.gui.project.calculation;
 
 import edu.khai.k105.hydrosystem.application.project.circuit.Circuit;
-import edu.khai.k105.hydrosystem.application.project.graph.GraphModel;
-import edu.khai.k105.hydrosystem.application.project.graph.GraphPoint;
-import edu.khai.k105.hydrosystem.application.project.graph.GraphSeries;
-import edu.khai.k105.hydrosystem.application.project.graph.GraphStage;
+import edu.khai.k105.hydrosystem.application.graph.GraphModel;
+import edu.khai.k105.hydrosystem.application.graph.GraphPoint;
+import edu.khai.k105.hydrosystem.application.graph.GraphSeries;
+import edu.khai.k105.hydrosystem.application.graph.GraphStage;
 import edu.khai.k105.hydrosystem.gui.graph.JGraph;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class OperatingPointViewer implements Viewer {
     private JPanel contentPane;
@@ -27,8 +28,12 @@ public class OperatingPointViewer implements Viewer {
     @Override
     public void recalculate(GraphStage mechanismStage) {
         GraphModel graphModel = new GraphModel();
-        graphModel.addSeries(circuit.getPump().getPumpCharacteristic());
-        graphModel.addSeries(circuit.systemCharacteristic(mechanismStage));
+        GraphSeries pumpCharacteristic = circuit.getPump().getPumpCharacteristic();
+        pumpCharacteristic.getMeta().put("series color", Color.RED);
+        GraphSeries systemCharacteristic = circuit.systemCharacteristic(mechanismStage);
+        systemCharacteristic.getMeta().put("series color", Color.BLUE);
+        graphModel.addSeries(pumpCharacteristic);
+        graphModel.addSeries(systemCharacteristic);
         GraphPoint operatingPoint = circuit.operatingPoint(mechanismStage);
         if (operatingPoint != null) {
             GraphSeries operatingPointSeries = new GraphSeries();
@@ -40,6 +45,8 @@ public class OperatingPointViewer implements Viewer {
         }
         graphPanel.setModel(graphModel);
         graphPanel.adaptScale();
+        graphPanel.updateUI();
+        operatingPointLabel.updateUI();
     }
 
 }

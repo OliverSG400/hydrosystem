@@ -2,6 +2,8 @@ package edu.khai.k105.hydrosystem;
 
 import edu.khai.k105.hydrosystem.application.Application;
 import edu.khai.k105.hydrosystem.gui.ApplicationWindow;
+import net.sf.dynamicreports.report.builder.DynamicReports;
+import net.sf.dynamicreports.report.exception.DRException;
 
 import javax.swing.*;
 

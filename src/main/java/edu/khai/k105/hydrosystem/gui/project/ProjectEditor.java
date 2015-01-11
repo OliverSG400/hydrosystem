@@ -1,7 +1,6 @@
 package edu.khai.k105.hydrosystem.gui.project;
 
 import edu.khai.k105.hydrosystem.application.project.Project;
-import edu.khai.k105.hydrosystem.application.project.graph.GraphPoint;
 
 import javax.swing.*;
 import java.awt.event.*;
