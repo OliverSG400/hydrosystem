@@ -1,15 +1,10 @@
 package edu.khai.k105.hydrosystem.gui.report;
 
-import edu.khai.k105.hydrosystem.application.Application;
+import edu.khai.k105.hydrosystem.dataModel.Application;
 import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
 import net.sf.dynamicreports.report.builder.style.StyleBuilder;
-import net.sf.dynamicreports.report.constant.HorizontalAlignment;
 import net.sf.dynamicreports.report.constant.VerticalAlignment;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRField;
-import net.sf.jasperreports.engine.data.JRAbstractBeanDataSource;
 
-import static net.sf.dynamicreports.report.builder.DynamicReports.cmp;
 import static net.sf.dynamicreports.report.builder.DynamicReports.stl;
 
 public class PressureLossesTable {

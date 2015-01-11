@@ -44,6 +44,7 @@
             </constraints>
             <properties>
               <font name="Courier New"/>
+              <foreground color="-7039852"/>
               <text value="Создайте новый проект выбрав меню Проект - Создать"/>
             </properties>
           </component>
@@ -53,6 +54,7 @@
             </constraints>
             <properties>
               <font name="Courier New"/>
+              <foreground color="-7039852"/>
               <text value="Откройте существующий выбрав меню Проект - Открыть"/>
             </properties>
           </component>
@@ -62,6 +64,7 @@
             </constraints>
             <properties>
               <font name="Courier New" size="24" style="1"/>
+              <foreground color="-7039852"/>
               <horizontalAlignment value="0"/>
               <horizontalTextPosition value="0"/>
               <text value="Проект не открыт "/>

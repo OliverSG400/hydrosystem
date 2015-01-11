@@ -1,7 +1,7 @@
 package edu.khai.k105.hydrosystem.gui.graph;
 
-import edu.khai.k105.hydrosystem.application.graph.GraphModel;
-import edu.khai.k105.hydrosystem.application.graph.GraphPoint;
+import edu.khai.k105.hydrosystem.dataModel.graph.GraphModel;
+import edu.khai.k105.hydrosystem.dataModel.graph.GraphPoint;
 import edu.khai.k105.hydrosystem.gui.validation.NoCharacterVerifier;
 
 import javax.swing.*;

@@ -1,6 +1,6 @@
 package edu.khai.k105.hydrosystem.gui.report;
 
-import edu.khai.k105.hydrosystem.application.Application;
+import edu.khai.k105.hydrosystem.dataModel.Application;
 import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
 import net.sf.dynamicreports.report.builder.DynamicReports;
 import net.sf.dynamicreports.report.builder.chart.Bar3DChartBuilder;

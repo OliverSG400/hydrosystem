@@ -1,8 +1,8 @@
 package edu.khai.k105.hydrosystem.gui;
 
-import edu.khai.k105.hydrosystem.application.Application;
-import edu.khai.k105.hydrosystem.gui.project.calculation.CalculationViewer;
-import edu.khai.k105.hydrosystem.gui.project.circuit.SchemeEditor;
+import edu.khai.k105.hydrosystem.dataModel.Application;
+import edu.khai.k105.hydrosystem.gui.project.viewer.CalculationPanel;
+import edu.khai.k105.hydrosystem.gui.project.editor.SchemeEditor;
 import edu.khai.k105.hydrosystem.gui.report.Reporter;
 
 import javax.swing.*;
@@ -27,7 +27,7 @@ public class ApplicationWindow extends JFrame implements Runnable {
     private JMenu reportMenu;
     private JMenuItem generateReportMenuItem;
     private SchemeEditor schemeEditor;
-    private CalculationViewer calculationViewer;
+    private CalculationPanel calculationViewer;
     private Application application;
 
     public ApplicationWindow(Application application) {
@@ -240,7 +240,7 @@ public class ApplicationWindow extends JFrame implements Runnable {
     }
 
     private void openProjectCalculationViewer() {
-        calculationViewer = new CalculationViewer(application.getCurrentProject().getCircuit());
+        calculationViewer = new CalculationPanel(application.getCurrentProject().getCircuit());
         setContentPane(calculationViewer.getContentPane());
         validate();
     }
