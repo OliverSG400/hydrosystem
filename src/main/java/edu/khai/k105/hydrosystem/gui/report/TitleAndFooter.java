@@ -10,7 +10,7 @@ import static net.sf.dynamicreports.report.builder.DynamicReports.*;
 
 public class TitleAndFooter {
 
-    public static void build(Application application, String title, JasperReportBuilder reportBuilder) {
+    public static void build(String title, String currentStage, JasperReportBuilder reportBuilder) {
         StyleBuilder titleStyle = stl.style()
                 .setVerticalAlignment(VerticalAlignment.MIDDLE)
                 .setFontSize(15);
@@ -21,7 +21,7 @@ public class TitleAndFooter {
                 cmp.horizontalList().add(
 //                        cmp.image(getClass().getResourceAsStream("../images/dynamicreports.png")).setFixedDimension(80, 80),
                         cmp.text(title).setStyle(titleStyle).setHorizontalAlignment(HorizontalAlignment.LEFT),
-                        cmp.text(application.getCurrentProject().getTitle()).setStyle(title2Style).setHorizontalAlignment(HorizontalAlignment.RIGHT))
+                        cmp.text(currentStage).setStyle(title2Style).setHorizontalAlignment(HorizontalAlignment.RIGHT))
                         .newRow(10).add(cmp.filler().setStyle(stl.style().setTopBorder(stl.pen2Point())).setFixedHeight(10)));
         reportBuilder.pageFooter(cmp.pageXofY());
     }

@@ -60,7 +60,7 @@ public class ApplicationWindow extends JFrame implements Runnable {
             menuBar = new JMenuBar();
             menuBar.add(getProjectJMenu());
             menuBar.add(getModeMenu());
-            menuBar.add(getReportMenu());
+            //menuBar.add(getReportMenu());
         }
         return menuBar;
     }
@@ -260,7 +260,7 @@ public class ApplicationWindow extends JFrame implements Runnable {
             generateReportMenuItem.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    new Reporter().createReport(application);
+                    //new Reporter().createReport(application);
                 }
             });
         }
@@ -271,7 +271,7 @@ public class ApplicationWindow extends JFrame implements Runnable {
         modeMenu.setEnabled(true);
         saveProjectMenuItem.setEnabled(true);
         saveAsProjectMenuItem.setEnabled(true);
-        reportMenu.setEnabled(true);
+//        reportMenu.setEnabled(true);
     }
 
     private class HSPFileFilter extends FileFilter {
