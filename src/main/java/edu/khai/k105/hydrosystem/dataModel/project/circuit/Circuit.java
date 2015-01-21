@@ -86,15 +86,95 @@ public class Circuit {
     }
 
     public GraphPoint operatingPoint(GraphStage mechanismStage) {
-        GraphSeries systemCharacteristic = systemCharacteristic(mechanismStage);
-        for (int i = 0; i < getPump().getPumpCharacteristic().getPoints().size() - 1; i++) {
-            GraphSection pumpSection = new GraphSection();
-            pumpSection.setA(getPump().getPumpCharacteristic().getPoints().get(i));
-            pumpSection.setB(getPump().getPumpCharacteristic().getPoints().get(i + 1));
-            GraphSection systemSection = new GraphSection();
-            systemSection.setA(systemCharacteristic.getPoints().get(i));
-            systemSection.setB(systemCharacteristic.getPoints().get(i + 1));
-            GraphPoint operatingPoint = checkIntersect(pumpSection, systemSection);
+        return graphSeriesIntersect(systemCharacteristic(mechanismStage), getPump().getPumpCharacteristic(), mechanismStage);
+    }
+
+    public double responseTime() {
+        double totalTime = 0;
+        for (GraphStage stage : getMechanism().getStageGraph()) {
+               totalTime += responseTime(operatingPoint(stage).x, stage);
+        }
+        return totalTime;
+    }
+
+    public double responseTimeConsiderAccumulator() throws Exception {
+        double previousAccumulatorVolume = getAccumulator().getInitVolume();
+        double responseTime = 0;
+        for (GraphStage mechanismStage : getMechanism().getStageGraph()) {
+            GraphPoint operatingPoint = operatingPointConsideringAccumulator(mechanismStage);
+            double accumulatorFlowRate = accumulatorFlowRate(mechanismStage, operatingPoint.y, previousAccumulatorVolume);
+            double resultFlowRate = operatingPoint.x + accumulatorFlowRate;
+            responseTime += responseTime(resultFlowRate, mechanismStage);
+            previousAccumulatorVolume += getAccumulator().deltaVolume(previousAccumulatorVolume, getAccumulator().pressureToVolume(operatingPoint.y));
+        }
+        return responseTime;
+    }
+
+    public double systemFlowRateConsideringAccumulator(GraphStage mechanismStage) throws Exception {
+        double previousAccumulatorVolume = getAccumulator().getInitVolume();
+        for (GraphStage currentStage : getMechanism().getStageGraph()) {
+            GraphPoint operatingPoint = operatingPointConsideringAccumulator(currentStage);
+            double accumulatorFlowRate = accumulatorFlowRate(currentStage, operatingPoint.y, previousAccumulatorVolume);
+            double resultFlowRate = operatingPoint.x + accumulatorFlowRate;
+            previousAccumulatorVolume += getAccumulator().deltaVolume(previousAccumulatorVolume, getAccumulator().pressureToVolume(operatingPoint.y));
+            if (currentStage.getBase().getA().equals(mechanismStage.getBase().getA())) {
+                return resultFlowRate;
+            }
+        }
+        throw new Exception("Участки переменной нагрузки не совпали");
+    }
+
+    public double accumulatorFlowRate(GraphStage mechanismStage, double systemPressure, double previousStageAccumulatorVolume) throws Exception {
+        return getAccumulator().fluidFlowRate(previousStageAccumulatorVolume,
+                systemPressure, responseTime(systemPressure, mechanismStage));
+    }
+
+    public double responseTime(double flowRate, GraphStage mechanismStage) {
+        return mechanismStage.getBase().distanceBetweenPointsX() / (flowRate / getMechanism().getPistonSquare());
+    }
+
+    public GraphSeries pressureBeforeAccumulator(GraphStage mechanismStage) {
+        GraphSeries pressureBeforeAccumulatorSeries = new GraphSeries();
+        List<GraphPoint> pressureBeforeAccumulator = pressureBeforeAccumulatorSeries.getPoints();
+        for (GraphPoint point : pump.getPumpCharacteristic().getPoints()) {
+            double p = 0;
+            double q = point.x;
+            for (int index = 0; index < getAccumulatorElementIndex(); index++) {
+                p += elements.get(index).deltaP(mechanismStage, q, workingFluid, gravityAcceleration);
+            }
+            pressureBeforeAccumulator.add(new GraphPoint(q, point.y - p));
+        }
+        return pressureBeforeAccumulatorSeries;
+    }
+
+    public GraphSeries pressureLossesAfterAccumulator(GraphStage mechanismStage) {
+        GraphSeries pressureLossesAfterAccumulatorSeries = new GraphSeries();
+        List<GraphPoint> pressureLossesAfterAccumulator = pressureLossesAfterAccumulatorSeries.getPoints();
+        for (GraphPoint point : pump.getPumpCharacteristic().getPoints()) {
+            double p = 0;
+            double q = point.x;
+            for (int index = getAccumulatorElementIndex() + 1; index < elements.size(); index++) {
+                p += elements.get(index).deltaP(mechanismStage, q, workingFluid, gravityAcceleration);
+            }
+            pressureLossesAfterAccumulator.add(new GraphPoint(q, p));
+        }
+        return pressureLossesAfterAccumulatorSeries;
+    }
+
+    public GraphPoint operatingPointConsideringAccumulator(GraphStage mechanismStage) {
+        return graphSeriesIntersect(pressureBeforeAccumulator(mechanismStage),
+                pressureLossesAfterAccumulator(mechanismStage), mechanismStage);
+    }
+
+    public GraphPoint graphSeriesIntersect(GraphSeries one, GraphSeries another, GraphStage mechanismStage) {
+        for (int i = 0; i < one.getPoints().size() - 1; i++) {
+            GraphSection oneSection = new GraphSection();
+            oneSection.setA(one.getPoints().get(i));
+            oneSection.setB(one.getPoints().get(i + 1));
+            GraphSection anotherSection = new GraphSection();
+            anotherSection.setA(another.getPoints().get(i));
+            anotherSection.setB(another.getPoints().get(i + 1));
+            GraphPoint operatingPoint = checkIntersect(oneSection, anotherSection);
             if (operatingPoint != null) {
                 return operatingPoint;
             }
@@ -102,40 +182,9 @@ public class Circuit {
         return null;
     }
 
-    public double totalResponseTime() {
-        double totalTime = 0;
-        for (GraphStage stage : getMechanism().getStageGraph()) {
-               totalTime += stageResponseTime(stage);
-        }
-        return totalTime;
-    }
 
-    public double stageResponseTime(GraphStage mechanismStage) {
-        double stageResponseTime = 0;
 
-//        if (getAccumulator() != null) {
 
-//        } else {
-        stageResponseTime = getMechanism().getPistonSquare()
-                * mechanismStage.getBase().distanceBetweenPointsX()
-                /  operatingPoint(mechanismStage).x;
-
-//        }
-        return stageResponseTime;
-    }
-
-    public void accumulatorCalculation(GraphStage mechanismStage) {
-        GraphPoint operatingPoint = operatingPoint(mechanismStage);
-        double deltaTime = Math.abs(mechanismStage.getBase().getB().x - mechanismStage.getBase().getA().x) /
-                (operatingPoint.x / getMechanism().getPistonSquare());
-        try {
-            double QsystNew = operatingPoint.x + getAccumulator().xFunction(operatingPoint.y, deltaTime);
-            System.out.println("QsystNew = " + QsystNew);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-
-    }
 
     public MechanismElement getMechanism() {
         for (Element element : elements) {
@@ -153,6 +202,10 @@ public class Circuit {
             }
         }
         return null;
+    }
+
+    public int getAccumulatorElementIndex() {
+        return elements.indexOf(getAccumulator());
     }
 
     /**

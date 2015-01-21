@@ -17,7 +17,18 @@ public class TotalResponseTimeWidget implements UpdateAble {
 
     @Override
     public void updateDataModel(GraphStage mechanismStage) {
-        totalResponseTimeLabel.setText(String.valueOf(circuit.totalResponseTime()));
+        double responseTime;
+        if (circuit.getAccumulator() != null) {
+            try {
+                responseTime = circuit.responseTimeConsiderAccumulator();
+                totalResponseTimeLabel.setText(String.valueOf(responseTime));
+            } catch (Exception e) {
+                totalResponseTimeLabel.setText(e.getMessage());
+            }
+        } else {
+//            responseTime = circuit.responseTime();
+//            totalResponseTimeLabel.setText(String.valueOf(responseTime));
+        }
     }
 
     public JPanel getContentPane() {

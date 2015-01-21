@@ -17,7 +17,7 @@ public class StageResponseTimeWidget implements UpdateAble {
 
     @Override
     public void updateDataModel(GraphStage mechanismStage) {
-        stageTimeLabel.setText(String.valueOf(circuit.stageResponseTime(mechanismStage)));
+//        stageTimeLabel.setText(String.valueOf(circuit.responseTime(circuit.operatingPoint(mechanismStage).y, mechanismStage)));
     }
 
     public JPanel getContentPane() {

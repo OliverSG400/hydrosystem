@@ -24,9 +24,9 @@ public class OperatingPointGraphWidget implements UpdateAble {
     public void updateDataModel(GraphStage mechanismStage) {
         GraphModel graphModel = new GraphModel();
         GraphSeries pumpCharacteristic = circuit.getPump().getPumpCharacteristic();
-        pumpCharacteristic.getMeta().put("series color", Color.RED);
+        pumpCharacteristic.getMeta().put(GraphSeries.SERIES_COLOR, Color.RED);
         GraphSeries systemCharacteristic = circuit.systemCharacteristic(mechanismStage);
-        systemCharacteristic.getMeta().put("series color", Color.BLUE);
+        systemCharacteristic.getMeta().put(GraphSeries.SERIES_COLOR, Color.BLUE);
         graphModel.addSeries(pumpCharacteristic);
         graphModel.addSeries(systemCharacteristic);
         GraphPoint operatingPoint = circuit.operatingPoint(mechanismStage);

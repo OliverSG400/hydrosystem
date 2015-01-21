@@ -10,6 +10,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.util.List;
+import java.util.ArrayList;
 
 public class JGraph extends JPanel {
 
@@ -29,6 +31,7 @@ public class JGraph extends JPanel {
     private boolean adaptScale;
     private int selectedSeries = 0;
     private int selectedPoint = 0;
+    private List<GraphPoint> infiniteVerticalLine = new ArrayList<>();
 
     //drug and drop points
 
@@ -150,6 +153,10 @@ public class JGraph extends JPanel {
         return null;
     }
 
+    public void setInfiniteVerticalLine(GraphPoint graphPoint) {
+        infiniteVerticalLine.add(graphPoint);
+    }
+
     private boolean pointIntersect(Point p1, Point p2, int sensitivityRange) {
         return (Math.abs(p1.x - p2.x) <= sensitivityRange)
                 && (Math.abs(p1.y - p2.y) <= sensitivityRange);
@@ -213,6 +220,15 @@ public class JGraph extends JPanel {
             paintHighlight(g);
         }
         paintStatus(g);
+        paintInfiniteLines(g);
+    }
+
+    private void paintInfiniteLines(Graphics g) {
+        for (GraphPoint point : infiniteVerticalLine) {
+            drawLine(g,
+                    new Point(translate(point).x, GRID_MARGIN_TOP),
+                    new Point(translate(point).x, getHeight() - GRID_MARGIN_BOTTOM));
+        }
     }
 
     private void paintStatus(Graphics g) {

@@ -19,6 +19,7 @@ public class AccumulatorEditor {
     private JFormattedTextField minPressureTextField;
     private JFormattedTextField maxVolumeTextField;
     private JFormattedTextField politropaTextField;
+    private JFormattedTextField initPressureTextField;
     private JButton removeElementButton;
 
     public AccumulatorEditor(final AccumulatorElement accumulatorElement, final Project currentProject, final SchemeEditor schemeEditor) {
@@ -27,11 +28,13 @@ public class AccumulatorEditor {
         minPressureTextField.setText(String.valueOf(accumulatorElement.getMinPressure()));
         maxVolumeTextField.setText(String.valueOf(accumulatorElement.getMaxVolume()));
         politropaTextField.setText(String.valueOf(accumulatorElement.getPolitropa()));
+        initPressureTextField.setText(String.valueOf(accumulatorElement.getInitPressure()));
         maxPressureTextField.setInputVerifier(NoCharacterVerifier.getInstance());
         minVolumeTextField.setInputVerifier(NoCharacterVerifier.getInstance());
         minPressureTextField.setInputVerifier(NoCharacterVerifier.getInstance());
         maxVolumeTextField.setInputVerifier(NoCharacterVerifier.getInstance());
         politropaTextField.setInputVerifier(NoCharacterVerifier.getInstance());
+        initPressureTextField.setInputVerifier(NoCharacterVerifier.getInstance());
         maxPressureTextField.addFocusListener(new FocusAdapter() {
             @Override
             public void focusLost(FocusEvent e) {
@@ -87,6 +90,18 @@ public class AccumulatorEditor {
                 try {
                     float value = Float.parseFloat(politropaTextField.getText());
                     accumulatorElement.setPolitropa(value);
+                } catch (NumberFormatException ex) {
+                    System.out.println("Number format exception");
+                }
+            }
+        });
+        initPressureTextField.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                super.focusLost(e);
+                try {
+                    float value = Float.parseFloat(initPressureTextField.getText());
+                    accumulatorElement.setInitPressure(value);
                 } catch (NumberFormatException ex) {
                     System.out.println("Number format exception");
                 }

@@ -14,6 +14,8 @@ import java.util.Map;
 @XmlType
 public class GraphSeries implements Serializable {
 
+    public static final String SERIES_COLOR = "series color";
+
     @XmlElementWrapper(name = "metaElements")
     private Map<String, Object> meta = new HashMap<String, Object>();
     @XmlElementWrapper(name = "pointsElements")

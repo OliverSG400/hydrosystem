@@ -22,6 +22,8 @@ public class AccumulatorElement extends Element {
     private double maxVolume;
     @XmlAttribute
     private double politropa = 1.3;
+    @XmlAttribute
+    private double initPressure;
 
     @Override
     public double deltaP(GraphStage mechanismStage, double pumpQ, Fluid fluid, double gravityAcceleration) {
@@ -31,19 +33,7 @@ public class AccumulatorElement extends Element {
         return 0;
     }
 
-    public double constant() {
-        return maxPressure * Math.pow(minVolume, politropa);
-    }
 
-    public double xFunction(double systemPressure, double deltaTime) throws Exception {
-        if (systemPressure <= maxPressure) {
-            double currentVolume = Math.pow(constant() / systemPressure, - politropa);
-            double deltaVolume = minVolume - currentVolume; // вот тут непонятно. должен быть предыдущий объем для сравнения
-            double fluidFlowRate = deltaVolume / deltaTime;
-            return fluidFlowRate;
-        } else {
-            throw new Exception("Давление в аккумуляторе превышает максимальное");
-        }
 //        {Ïîèñê òî÷êè ïåðåñå÷åíèÿ ìåæäó ãðàôèêîì 1 ó÷àñòêà è 2-3}
 //
 //        {-------------------------------------------------------}
@@ -88,6 +78,30 @@ public class AccumulatorElement extends Element {
 //        end else begin
 //        ShowMessage('Äàâëåíèå â àêêóìóëÿòîðå ïðåâûøàåò ìàêñèìàëüíî äîïóñòèìîå');
 //        end;
+    public double constant() {
+    return maxPressure * Math.pow(minVolume, politropa);
+}
+
+    public double fluidFlowRate(double previousVolume, double systemPressure, double deltaTime) throws Exception {
+        if (systemPressure <= maxPressure) {
+            double currentVolume = pressureToVolume(systemPressure);
+            double fluidFlowRate = deltaVolume(previousVolume, currentVolume) / deltaTime;
+            return fluidFlowRate;
+        } else {
+            throw new Exception("Давление в аккумуляторе превышает максимальное");
+        }
+    }
+
+    public double deltaVolume(double previous, double current) {
+        return current - previous;
+    }
+
+    public double pressureToVolume(double pressure) {
+        return Math.pow(constant() / pressure, - politropa);
+    }
+
+    public double getInitVolume() {
+        return pressureToVolume(initPressure);
     }
 
     @Override
@@ -133,5 +147,13 @@ public class AccumulatorElement extends Element {
 
     public void setMinVolume(double minVolume) {
         this.minVolume = minVolume;
+    }
+
+    public double getInitPressure() {
+        return initPressure;
+    }
+
+    public void setInitPressure(double initPressure) {
+        this.initPressure = initPressure;
     }
 }

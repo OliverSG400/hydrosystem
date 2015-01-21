@@ -10,16 +10,16 @@ import javax.xml.bind.annotation.*;
 public class PipelineElement extends Element {
 
     @XmlAttribute
-    private float length;
+    private double length;
     @XmlAttribute
-    private float diameter;
+    private double diameter;
 
     @Override
     public String toString() {
         return "Трубопровод";
     }
 
-    public float getLength() {
+    public double getLength() {
         return length;
     }
 
@@ -27,7 +27,7 @@ public class PipelineElement extends Element {
         this.length = length;
     }
 
-    public float getDiameter() {
+    public double getDiameter() {
         return diameter;
     }
 
@@ -51,7 +51,7 @@ public class PipelineElement extends Element {
                     * gravityAcceleration
                     * Math.pow(diameter, 5)
                     * Math.pow(Math.PI, 2));
-        }
+         }
         return deltaP;
     }
 
@@ -61,12 +61,12 @@ public class PipelineElement extends Element {
             lambda = 64 / reynolds;
         }
         if ((reynolds <= 100000) && (reynolds >= 2300)) {
-            double lnReynolds = (-Math.log(1-reynolds))/reynolds;
-            lambda = 0.316 / Math.exp(lnReynolds / 4);
+            lambda = 0.316 / Math.exp(Math.log(reynolds) / 4);
+            System.out.println("lambda = " + lambda);
         }
         if (reynolds > 100000) {
             double lnReynolds = (-Math.log(1-reynolds))/reynolds;
-            lambda = 0.09 / Math.exp(lnReynolds / 7);
+            lambda = 0.09 / Math.exp(Math.log(reynolds) / 7);
         }
         return lambda;
     }
