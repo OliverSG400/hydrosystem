@@ -62,7 +62,6 @@ public class PipelineElement extends Element {
         }
         if ((reynolds <= 100000) && (reynolds >= 2300)) {
             lambda = 0.316 / Math.exp(Math.log(reynolds) / 4);
-            System.out.println("lambda = " + lambda);
         }
         if (reynolds > 100000) {
             double lnReynolds = (-Math.log(1-reynolds))/reynolds;

@@ -26,8 +26,8 @@ public class TotalResponseTimeWidget implements UpdateAble {
                 totalResponseTimeLabel.setText(e.getMessage());
             }
         } else {
-//            responseTime = circuit.responseTime();
-//            totalResponseTimeLabel.setText(String.valueOf(responseTime));
+            responseTime = circuit.responseTime();
+            totalResponseTimeLabel.setText(String.valueOf(responseTime));
         }
     }
 

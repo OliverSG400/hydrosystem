@@ -208,27 +208,31 @@ public class Circuit {
         return elements.indexOf(getAccumulator());
     }
 
-    /**
-     * http://www.cyberforum.ru/pascalabc/thread589316.html
-     * @param first
-     * @param second
-     * @return
-     */
     private GraphPoint checkIntersect(GraphSection first, GraphSection second) {
-//      x:=-((x1*y2-x2*y1)*(x4-x3)-(x3*x4-x4*y3)*(x2-x1))/((y1-y2)*(x4-x3)-(y3-y4)*(x2-x1));
-//      y:=((y3-y4)*(-x)-(x3*y4-x4*y3))/(x4-x3);
-        double x = - ((first.getA().x * first.getB().y - first.getB().x * first.getA().y) * (second.getB().x - second.getA().x)
-                - (second.getA().x * second.getB().x - second.getB().x * second.getA().y) * (first.getB().x - first.getA().x))
-                / ((first.getA().y - first.getB().y) * (second.getB().x - second.getA().x)
-                - (second.getA().y - second.getB().y) * (first.getB().x - first.getA().x));
-        double y = ((second.getA().y - second.getB().y) * (-x)
-                - (second.getA().x * second.getB().y - second.getB().x * second.getA().y))
-                / (second.getB().x - second.getA().x);
-        if ((x >= first.getA().x) && (x <= first.getB().x)) {
-            return new GraphPoint(x, y);
+        double eps = 0.000001;
+
+        GraphPoint a1 = first.getA();
+        GraphPoint a2 = first.getB();
+        GraphPoint b1 = second.getA();
+        GraphPoint b2 = second.getB();
+
+        double d  = (a1.x-a2.x)*(b2.y-b1.y) - (a1.y-a2.y)*(b2.x-b1.x);
+        double da = (a1.x-b1.x)*(b2.y-b1.y) - (a1.y-b1.y)*(b2.x-b1.x);
+        double db = (a1.x-a2.x)*(a1.y-b1.y) - (a1.y-a2.y)*(a1.x-b1.x);
+
+        if ( Math.abs(d) < eps) {
+            System.out.println("Отрезки параллельны");
         } else {
-            return null;
+            double ta = da / d;
+            double tb = db / d;
+            if ((0 <= ta) && (ta <= 1)
+            && (0 <= tb) && (tb <= 1)) {
+                return new GraphPoint(a1.x + ta * (a2.x - a1.x), a1.y + ta * (a2.y - a1.y));
+            } else {
+                System.out.println("Отрезки не пересекаются");
+            }
         }
+        return null;
     }
 
     public float getGravityAcceleration() {
