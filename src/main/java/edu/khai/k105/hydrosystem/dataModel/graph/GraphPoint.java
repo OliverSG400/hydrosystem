@@ -50,7 +50,7 @@ public class GraphPoint implements Serializable {
 
     @Override
     public String toString() {
-        return "[" + String.format("%.4f", x) + " | " + String.format("%.4f", y) + "]";
+        return "[" + String.format("%.8f", x) + " | " + String.format("%.8f", y) + "]";
     }
 
 }

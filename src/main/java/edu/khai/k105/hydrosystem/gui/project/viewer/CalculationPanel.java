@@ -19,7 +19,6 @@ public class CalculationPanel {
     private OperatingPointGraphWidget operatingPointGraphViewer;
     private AccumulatorGraphWidget accumulatorGraphViewer;
     private OperatingPointWidget operatingPointWidget;
-    private StageResponseTimeWidget stageResponseTimeWidget;
     private TotalResponseTimeWidget totalResponseTimeWidget;
     private ReporterWidget reporterWidget;
     private Circuit circuit;
@@ -38,7 +37,7 @@ public class CalculationPanel {
         operatingPointWidget = new OperatingPointWidget(circuit);
         operatingPointGraphViewer = new OperatingPointGraphWidget(circuit);
         accumulatorGraphViewer = new AccumulatorGraphWidget(circuit);
-        stageResponseTimeWidget = new StageResponseTimeWidget(circuit);
+//        stageResponseTimeWidget = new StageResponseTimeWidget(circuit);
         totalResponseTimeWidget = new TotalResponseTimeWidget(circuit);
         reporterWidget = new ReporterWidget(circuit);
         pager = new Pager(circuit.getMechanism().getStageGraph(), new ArrayList<UpdateAble>());
@@ -47,7 +46,7 @@ public class CalculationPanel {
         pager.addUpdateAbleListener(operatingPointWidget);
         pager.addUpdateAbleListener(operatingPointGraphViewer);
         pager.addUpdateAbleListener(accumulatorGraphViewer);
-        pager.addUpdateAbleListener(stageResponseTimeWidget);
+//        pager.addUpdateAbleListener(stageResponseTimeWidget);
         pager.addUpdateAbleListener(totalResponseTimeWidget);
         pager.addUpdateAbleListener(reporterWidget);
         pager.invokeListenersUpdate();

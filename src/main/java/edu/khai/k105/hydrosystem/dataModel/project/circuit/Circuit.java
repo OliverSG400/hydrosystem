@@ -102,7 +102,8 @@ public class Circuit {
         double responseTime = 0;
         for (GraphStage mechanismStage : getMechanism().getStageGraph()) {
             GraphPoint operatingPoint = operatingPointConsideringAccumulator(mechanismStage);
-            double accumulatorFlowRate = accumulatorFlowRate(mechanismStage, operatingPoint.y, previousAccumulatorVolume);
+            double accumulatorFlowRate = accumulatorFlowRate(mechanismStage, operatingPoint.y, previousAccumulatorVolume, operatingPoint.x);
+            System.out.println("################ Result FLOW RATE = " + (operatingPoint.x + accumulatorFlowRate));
             double resultFlowRate = operatingPoint.x + accumulatorFlowRate;
             responseTime += responseTime(resultFlowRate, mechanismStage);
             previousAccumulatorVolume += getAccumulator().deltaVolume(previousAccumulatorVolume, getAccumulator().pressureToVolume(operatingPoint.y));
@@ -110,11 +111,26 @@ public class Circuit {
         return responseTime;
     }
 
+    public double responseTimeConsiderAccumulator(GraphStage mechanismStage) throws Exception {
+        double previousAccumulatorVolume = getAccumulator().getInitVolume();
+        for (GraphStage currentStage : getMechanism().getStageGraph()) {
+            GraphPoint operatingPoint = operatingPointConsideringAccumulator(currentStage);
+            double accumulatorFlowRate = accumulatorFlowRate(currentStage, operatingPoint.y, previousAccumulatorVolume, operatingPoint.x);
+            double resultFlowRate = operatingPoint.x + accumulatorFlowRate;
+            double stageResponseTime = responseTime(resultFlowRate, currentStage);
+            previousAccumulatorVolume += getAccumulator().deltaVolume(previousAccumulatorVolume, getAccumulator().pressureToVolume(operatingPoint.y));
+            if (currentStage.getBase().getA().equals(mechanismStage.getBase().getA())) {
+                return stageResponseTime;
+            }
+        }
+        return 0;
+    }
+
     public double systemFlowRateConsideringAccumulator(GraphStage mechanismStage) throws Exception {
         double previousAccumulatorVolume = getAccumulator().getInitVolume();
         for (GraphStage currentStage : getMechanism().getStageGraph()) {
             GraphPoint operatingPoint = operatingPointConsideringAccumulator(currentStage);
-            double accumulatorFlowRate = accumulatorFlowRate(currentStage, operatingPoint.y, previousAccumulatorVolume);
+            double accumulatorFlowRate = accumulatorFlowRate(currentStage, operatingPoint.y, previousAccumulatorVolume, operatingPoint.x);
             double resultFlowRate = operatingPoint.x + accumulatorFlowRate;
             previousAccumulatorVolume += getAccumulator().deltaVolume(previousAccumulatorVolume, getAccumulator().pressureToVolume(operatingPoint.y));
             if (currentStage.getBase().getA().equals(mechanismStage.getBase().getA())) {
@@ -124,9 +140,9 @@ public class Circuit {
         throw new Exception("Участки переменной нагрузки не совпали");
     }
 
-    public double accumulatorFlowRate(GraphStage mechanismStage, double systemPressure, double previousStageAccumulatorVolume) throws Exception {
+    public double accumulatorFlowRate(GraphStage mechanismStage, double systemPressure, double previousStageAccumulatorVolume, double systemFlow) throws Exception {
         return getAccumulator().fluidFlowRate(previousStageAccumulatorVolume,
-                systemPressure, responseTime(systemPressure, mechanismStage));
+                systemPressure, responseTime(systemFlow, mechanismStage));
     }
 
     public double responseTime(double flowRate, GraphStage mechanismStage) {
@@ -182,10 +198,6 @@ public class Circuit {
         return null;
     }
 
-
-
-
-
     public MechanismElement getMechanism() {
         for (Element element : elements) {
             if (element instanceof MechanismElement) {
@@ -229,7 +241,7 @@ public class Circuit {
             && (0 <= tb) && (tb <= 1)) {
                 return new GraphPoint(a1.x + ta * (a2.x - a1.x), a1.y + ta * (a2.y - a1.y));
             } else {
-                System.out.println("Отрезки не пересекаются");
+//                System.out.println("Отрезки не пересекаются");
             }
         }
         return null;

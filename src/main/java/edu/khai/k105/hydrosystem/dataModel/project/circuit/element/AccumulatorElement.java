@@ -97,7 +97,7 @@ public class AccumulatorElement extends Element {
     }
 
     public double pressureToVolume(double pressure) {
-        return Math.pow(constant() / pressure, - politropa);
+        return Math.pow(constant() / pressure, 1 / politropa);
     }
 
     public double getInitVolume() {

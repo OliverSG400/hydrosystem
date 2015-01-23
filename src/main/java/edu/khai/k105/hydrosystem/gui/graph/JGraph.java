@@ -10,6 +10,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.text.NumberFormat;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -98,6 +99,7 @@ public class JGraph extends JPanel {
         this.model = model;
         selectedSeries = model.getSeries().size() - 1;
         selectedPoint = model.getSeries().get(selectedSeries).getPoints().size() - 1;
+        infiniteVerticalLine.clear();
     }
 
     public Point translate(GraphPoint point) {
@@ -348,9 +350,9 @@ public class JGraph extends JPanel {
 //        ((Graphics2D)g).setStroke(previousStroke);
         for (GraphPoint gPoint : series.getPoints()) {
             Point point = translate(gPoint);
-            g.drawString(String.format("%.2f", gPoint.x), point.x, getHeight() - GRID_MARGIN_BOTTOM + 13);
-            g.drawString(String.format("%.2f", gPoint.y), point.x + 3, point.y - 3);
-            g.drawString(String.format("%.2f", gPoint.y), GRID_MARGIN_LEFT + 3, point.y - 3);
+            g.drawString(String.format("%.4f", gPoint.x), point.x, getHeight() - GRID_MARGIN_BOTTOM + 13);
+            g.drawString(String.format("%.4f", gPoint.y), point.x + 3, point.y - 3);
+            g.drawString(String.format("%.4f", gPoint.y), GRID_MARGIN_LEFT + 3, point.y - 3);
         }
     }
 

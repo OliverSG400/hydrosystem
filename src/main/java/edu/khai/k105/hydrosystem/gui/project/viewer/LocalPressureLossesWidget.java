@@ -5,6 +5,8 @@ import edu.khai.k105.hydrosystem.dataModel.graph.GraphPoint;
 import edu.khai.k105.hydrosystem.dataModel.graph.GraphStage;
 
 import javax.swing.*;
+import javax.swing.table.TableColumn;
+import java.util.Enumeration;
 import java.util.List;
 
 
@@ -36,7 +38,12 @@ public class LocalPressureLossesWidget implements UpdateAble {
 
     @Override
     public void updateDataModel(GraphStage mechanismStage) {
+        localLossesTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         localLossesTable.setModel(new PressureLossesTableModel(getLocalLossesData(circuit, mechanismStage), getColumns(circuit)));
+        Enumeration<TableColumn> columns = localLossesTable.getColumnModel().getColumns();
+        while (columns.hasMoreElements()) {
+            columns.nextElement().setPreferredWidth(150);
+        }
     }
 
 }

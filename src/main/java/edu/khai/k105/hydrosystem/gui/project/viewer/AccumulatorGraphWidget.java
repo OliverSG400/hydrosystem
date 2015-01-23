@@ -39,7 +39,6 @@ public class AccumulatorGraphWidget implements UpdateAble {
         double accumulatorResult = 0;
         try {
             accumulatorResult = circuit.systemFlowRateConsideringAccumulator(mechanismStage);
-            System.out.println("accumulatorResult = " + accumulatorResult);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

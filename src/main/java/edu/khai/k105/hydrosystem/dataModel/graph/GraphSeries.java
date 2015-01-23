@@ -1,9 +1,6 @@
 package edu.khai.k105.hydrosystem.dataModel.graph;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,7 +13,7 @@ public class GraphSeries implements Serializable {
 
     public static final String SERIES_COLOR = "series color";
 
-    @XmlElementWrapper(name = "metaElements")
+    @XmlTransient
     private Map<String, Object> meta = new HashMap<String, Object>();
     @XmlElementWrapper(name = "pointsElements")
     private List<GraphPoint> points = new ArrayList<GraphPoint>();
