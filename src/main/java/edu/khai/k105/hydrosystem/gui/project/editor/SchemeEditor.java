@@ -4,10 +4,7 @@ import edu.khai.k105.hydrosystem.dataModel.Application;
 import edu.khai.k105.hydrosystem.dataModel.project.circuit.Circuit;
 import edu.khai.k105.hydrosystem.dataModel.project.circuit.Fluid;
 import edu.khai.k105.hydrosystem.dataModel.project.circuit.Pump;
-import edu.khai.k105.hydrosystem.dataModel.project.circuit.element.AccumulatorElement;
-import edu.khai.k105.hydrosystem.dataModel.project.circuit.element.MechanismElement;
-import edu.khai.k105.hydrosystem.dataModel.project.circuit.element.PipelineElement;
-import edu.khai.k105.hydrosystem.dataModel.project.circuit.element.ResistanceElement;
+import edu.khai.k105.hydrosystem.dataModel.project.circuit.element.*;
 import edu.khai.k105.hydrosystem.gui.project.editor.element.AccumulatorEditor;
 import edu.khai.k105.hydrosystem.gui.project.editor.element.MechanismEditor;
 import edu.khai.k105.hydrosystem.gui.project.editor.element.PipelineEditor;
@@ -19,6 +16,9 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Collections;
 import java.util.List;
 
 public class SchemeEditor {
@@ -26,13 +26,15 @@ public class SchemeEditor {
     private JPanel contentPane;
     private JTree projectTree;
     private JPanel propertiesPanel;
+    private JButton upButton;
+    private JButton downButton;
     private Application application;
 
     public JPanel getContentPane() {
         return contentPane;
     }
 
-    public SchemeEditor(Application application) {
+    public SchemeEditor(final Application application) {
         this.application = application;
         projectTree.setModel(new ProjectTreeModel(application.getCurrentProject()));
         projectTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
@@ -40,6 +42,32 @@ public class SchemeEditor {
             @Override
             public void valueChanged(TreeSelectionEvent e) {
                 showRelatedPanel(projectTree.getLastSelectedPathComponent());
+            }
+        });
+        upButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Object selected = projectTree.getLastSelectedPathComponent();
+                List<Element> elements = application.getCurrentProject().getCircuit().getElements();
+                int i = elements.indexOf(selected);
+                if (i > 0) {
+                    Collections.swap(elements, i, i - 1);
+                }
+                getProjectTree().setModel(new ProjectTreeModel(application.getCurrentProject()));
+                expandAll(getProjectTree());
+            }
+        });
+        downButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Object selected = projectTree.getLastSelectedPathComponent();
+                List<Element> elements = application.getCurrentProject().getCircuit().getElements();
+                int i = elements.indexOf(selected);
+                if (i < elements.size() - 1) {
+                    Collections.swap(elements, i, i + 1);
+                }
+                getProjectTree().setModel(new ProjectTreeModel(application.getCurrentProject()));
+                expandAll(getProjectTree());
             }
         });
         expandAll(projectTree);

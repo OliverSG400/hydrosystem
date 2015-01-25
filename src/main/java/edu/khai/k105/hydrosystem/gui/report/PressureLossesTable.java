@@ -10,6 +10,8 @@ import net.sf.dynamicreports.report.builder.column.TextColumnBuilder;
 import net.sf.dynamicreports.report.builder.style.StyleBuilder;
 import net.sf.dynamicreports.report.builder.subtotal.AggregationSubtotalBuilder;
 import net.sf.dynamicreports.report.constant.HorizontalAlignment;
+import net.sf.dynamicreports.report.constant.PageOrientation;
+import net.sf.dynamicreports.report.constant.PageType;
 import net.sf.dynamicreports.report.constant.VerticalAlignment;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
@@ -29,13 +31,15 @@ public class PressureLossesTable {
                 .setBorder(stl.pen1Point())
                 .setBackgroundColor(Color.LIGHT_GRAY);
 
+        reportBuilder.setPageFormat(PageType.A4, PageOrientation.LANDSCAPE);
+
         GraphStage currentStage = circuit.getMechanism().getStageGraph().get(0);
         Double[][] pressureLosses = circuit
                 .getSumLossesData(currentStage);
         int columnCount = circuit.getPump().getPumpCharacteristic().getPoints().size() + 1;
         TextColumnBuilder<?>[] columns = new TextColumnBuilder[columnCount];
         columns[0] = col.columnRowNumberColumn("№")
-                .setFixedColumns(2)
+//                .setFixedColumns(2)
                 .setHorizontalAlignment(HorizontalAlignment.CENTER);
         for (int i = 1; i < columnCount; i++) {
             columns[i] = col.column(String.valueOf(circuit.getPump().getPumpCharacteristic().getPoints().get(i - 1).x)
